@@ -10,8 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+int is_valid_number(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (!(str[i] >= '0' && str[i] <= '9'))
+            return (0);
+            i++;
+    }
+    return (1);
+}
+
 int main(int argc, char **argv)
 {
+    char *number_str;
+    char *dict_path;
         // Comprobación de argumentos: debe ser 2 o 3 (recordando que argv[0] es el nombre del ejecutable)
     if (argc < 2 || argc > 3)
     {
@@ -42,5 +58,4 @@ int main(int argc, char **argv)
     // ...
 
     return (0);
-
 }
