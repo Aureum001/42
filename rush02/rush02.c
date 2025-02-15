@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   rush02.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/14 21:59:12 by marvin            #+#    #+#             */
-/*   Updated: 2025/02/14 21:59:12 by marvin           ###   ########.fr       */
+/*   Created: 2025/02/14 22:45:21 by ancanale          #+#    #+#             */
+/*   Updated: 2025/02/14 22:45:21 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <rush02.h>
 
 int is_valid_number(char *str)
 {
@@ -57,5 +59,29 @@ int main(int argc, char **argv)
     // Continuaremos con la lectura y el parseo del diccionario.
     // ...
 
+    // Parseo del diccionario
+    dict = parse_dictionary(dict_path);
+    if (!dict)
+    {
+        write(1, "Dict Error\n", 11);
+        return (1);
+    }
+
+    // Conversión del número a palabras
+    result = convert_number_to_words(number_str, dict);
+    if (!result)
+    {
+        write(1, "Dict Error\n", 11);
+        free_dictionary(dict);
+        return (1);
+    }
+
+    // Salida: imprimir el resultado
+    ft_putstr(result);
+    write(1, "\n", 1);
+
+    // Liberar recursos
+    free(result);
+    free_dictionary(dict);
     return (0);
 }
