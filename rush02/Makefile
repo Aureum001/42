@@ -1,6 +1,6 @@
 NAME = rush-02
 
-SRCS = main.c conversion.c dictionary.c ft_utils.c
+SRCS = rush02.c dictionary.c conversion.c ft_utils.c ft_file.c
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
