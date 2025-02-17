@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 17:14:37 by ancanale          #+#    #+#             */
-/*   Updated: 2025/02/15 12:01:36 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:48:39 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,5 @@ int	ft_atoi_base(char *str, char *base)
 		}
 		return (result * sign);
 	}
+	return (0);
 }

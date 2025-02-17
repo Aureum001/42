@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:27:06 by ancanale          #+#    #+#             */
-/*   Updated: 2025/02/12 16:27:09 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:58:11 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 void	ft_putstr(char *str)
 {
-	int		i;
-
-	i = 0;
-	while (str[i])
+	if (!str)
+		return ;
+	while (*str)
 	{
-		write(1, str + i, 1);
-		i++;
+		write(1, str++, 1);
 	}
 }
