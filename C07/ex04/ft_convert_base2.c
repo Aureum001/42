@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
+/*   ft_convert_base2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 17:14:37 by ancanale          #+#    #+#             */
-/*   Updated: 2025/02/17 12:48:39 by ancanale         ###   ########.fr       */
+/*   Created: 2025/02/18 17:14:53 by ancanale          #+#    #+#             */
+/*   Updated: 2025/02/18 17:44:38 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,35 @@ int	ft_strlen(char *str)
 	while (str[len])
 		len++;
 	return (len);
+}
+
+int	c_in_base(char c, char *base)
+{
+	int	i;
+
+	i = 0;
+	while (base[i])
+	{
+		if (c == base[i])
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	ft_num_digits(int nbr, int base_len)
+{
+	int	digits;
+
+	digits = 0;
+	if (nbr <= 0)
+		digits = 1;
+	while (nbr)
+	{
+		nbr /= base_len;
+		digits++;
+	}
+	return (digits);
 }
 
 int	check_base_condition(char *base)
@@ -47,44 +76,18 @@ int	check_base_condition(char *base)
 	return (1);
 }
 
-int	char_in_base(char c, char *base)
+int	skip_whitespace_and_sign(char *nbr, int *sign)
 {
 	int	i;
 
 	i = 0;
-	while (base[i])
+	while ((nbr[i] == ' ') || (nbr[i] >= '\t' && nbr[i] <= '\r'))
+		i++;
+	while (nbr[i] == '-' || nbr[i] == '+')
 	{
-		if (c == base[i])
-			return (i);
+		if (nbr[i] == '-')
+			*sign *= -1;
 		i++;
 	}
-	return (-1);
-}
-
-int	ft_atoi_base(char *str, char *base)
-{
-	int		i;
-	int		sign;
-	int		result;
-
-	if (check_base_condition(base))
-	{
-		result = 0;
-		i = 0;
-		sign = 1;
-		while ((str[i] == ' ') || (str[i] >= '\t' && str[i] <= '\r'))
-			i++;
-		while (str[i] == '-' || str[i] == '+')
-		{
-			if (str[i] == '-')
-				sign *= -1;
-			i++;
-		}
-		while (char_in_base(str[i], base) >= 0)
-		{
-			result = result * ft_strlen(base) + char_in_base(str[i++], base);
-		}
-		return (result * sign);
-	}
-	return (0);
+	return (i);
 }
