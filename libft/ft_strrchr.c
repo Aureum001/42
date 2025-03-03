@@ -1,16 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isspace.c                                       :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:04:49 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 16:04:49 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 19:20:48 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 19:20:48 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isspace(char c)
+#include <libft.h>
+
+char	*ft_strrchr(const char *str, int c)
 {
-	return ((c >= '\t' && c <= '\r') || c == ' ');
+	int	len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	while (len && *(str + len) != (char)c)
+		len--;
+	if (*(str + len) == (char)c)
+		return ((char *)(str + len));
+	return (NULL);
 }

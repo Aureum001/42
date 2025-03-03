@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:29:29 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 16:29:29 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 21:12:22 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 21:12:22 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-size_t	ft_strlen(const char *str)
+char	*ft_strdup(const char *src)
 {
+	char	*str;
 	size_t	len;
 
+	len = ft_strlen(src);
+	str = (char *)malloc(sizeof(*src) * (len + 1));
 	if (!str)
-		return (0);
-	len = 0;
-	while (*str++)
-		len++;
-	return (len);
+	{
+		errno = ENOMEM;
+		return (NULL);
+	}
+	ft_strlcpy(str, src, len + 1);
+	return (str);
 }

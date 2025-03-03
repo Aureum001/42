@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:29:29 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 16:29:29 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 19:11:06 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 19:11:06 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-size_t	ft_strlen(const char *str)
+char	*ft_strchr(const char *str, int c)
 {
-	size_t	len;
-
 	if (!str)
-		return (0);
-	len = 0;
-	while (*str++)
-		len++;
-	return (len);
+		return (NULL);
+	while (*str)
+		if (*str++ == (char) c)
+			return (char *)(str - 1);
+	if (*str == (char)c)
+		return ((char *)str);
+	return (NULL);
 }

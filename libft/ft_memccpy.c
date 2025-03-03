@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 16:29:29 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 16:29:29 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 20:17:49 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 20:17:49 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-size_t	ft_strlen(const char *str)
+void	*ft_memccpy(void *dest, const void *src, int c, size_t n)
 {
-	size_t	len;
-
-	if (!str)
-		return (0);
-	len = 0;
-	while (*str++)
-		len++;
-	return (len);
+	while (n--)
+	{
+		*(char *)dest++ = *(char *)src;
+		if (*(char *)src++ == (char)c)
+			return (dest);
+	}
+	return (NULL);
 }
