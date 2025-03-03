@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:50:41 by ancanale          #+#    #+#             */
-/*   Updated: 2025/02/15 12:00:57 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/02/15 11:45:35 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,3 @@ void	ft_putnbr_base(int nbr, char *base)
 			ft_putchar(base[nbr]);
 	}
 }
-
