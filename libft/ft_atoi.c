@@ -14,8 +14,8 @@
 
 int	ft_atoi(const char *str)
 {
-	int		sign;
-	long	result;
+	int				sign;
+	unsigned int	result;
 
 	sign = 1;
 	result = 0;
@@ -32,7 +32,6 @@ int	ft_atoi(const char *str)
 			return (0);
 		if (result > 2147483647 && sign == 1)
 			return (0);
-		str++;
 	}
 	return ((int)result * sign);
 }
