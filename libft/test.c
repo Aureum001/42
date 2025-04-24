@@ -93,13 +93,13 @@ int main(void) {
     // test_ft_putstr_fd();
     test_ft_calloc();
     test_ft_split();
-    // test_ft_lstadd_back();
-    // test_ft_lstadd_front();
-    // test_ft_lstclear();
-    // test_ft_lstdelone();
-    // test_ft_lstiter();
-    // test_ft_lstlast();
-    // test_ft_lstmap();
+    test_ft_lstadd_back();
+    test_ft_lstadd_front();
+    test_ft_lstclear();
+    test_ft_lstdelone();
+    test_ft_lstiter();
+    test_ft_lstlast();
+    test_ft_lstmap();
     // test_ft_lstnew();
     // test_ft_lstsize();
     printf("All tests passed!\n");
@@ -700,11 +700,11 @@ void test_ft_split(void) {
     assert_split_result(result2, expected2);
     free_split_result(result2);
 
-    // char *s3 = ",hello,world,";
-    // char *expected3[] = {"", "hello", "world", "", NULL};
-    // char **result3 = ft_split(s3, ',');
-    // assert_split_result(result3, expected3);
-    // free_split_result(result3);
+    char *s3 = "      split       this for   me  !       ";
+    char *expected3[] = {"split", "this", "for", "me", "!", NULL};
+    char **result3 = ft_split(s3, ' ');
+    assert_split_result(result3, expected3);
+    free_split_result(result3);
 
     char *s4 = "no_delimiter";
     char *expected4[] = {"no_delimiter", NULL};
@@ -730,3 +730,353 @@ void test_ft_split(void) {
     printf("✅ test_ft_split passed\n");
 }
 
+// Helper function to compare two lists (content only for simplicity here)
+int compare_lists(t_list *lst1, void *content1, t_list *lst2, void *content2) {
+    if (!lst1 || !lst2)
+        return (lst1 == lst2) && (content1 == content2);
+    return (lst1->content == content1) && (lst2->content == content2);
+}
+
+void test_ft_lstadd_back()
+{
+	t_list *head = NULL;
+    t_list *new_node1;
+    t_list *new_node2;
+    t_list *new_node3;
+
+    // Test 1: Add to an empty list
+    new_node1 = ft_lstnew("first");
+    ft_lstadd_back(&head, new_node1);
+    assert(head == new_node1);
+    assert(head->next == NULL);
+    assert(ft_lstsize(head) == 1);
+
+    // Test 2: Add to a list with one element
+    new_node2 = ft_lstnew("second");
+    ft_lstadd_back(&head, new_node2);
+    assert(head == new_node1);
+    assert(head->next == new_node2);
+    assert(new_node2->next == NULL);
+    assert(ft_lstsize(head) == 2);
+
+    // Test 3: Add to a list with multiple elements
+    new_node3 = ft_lstnew("third");
+    ft_lstadd_back(&head, new_node3);
+    assert(head == new_node1);
+    assert(head->next == new_node2);
+    assert(new_node2->next == new_node3);
+    assert(new_node3->next == NULL);
+    assert(ft_lstsize(head) == 3);
+
+    // Clean up memory
+    t_list *current = head;
+    t_list *next;
+    while (current) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    head = NULL; // Reset head for potential future tests
+    printf("✅ test_ft_lstadd_back passed\n");
+}
+
+void test_ft_lstadd_front()
+{
+	t_list *head = NULL;
+    t_list *new_node1;
+    t_list *new_node2;
+    t_list *new_node3;
+
+    // Test 1: Add to an empty list
+    new_node1 = ft_lstnew("first");
+    ft_lstadd_front(&head, new_node1);
+    assert(head == new_node1);
+    assert(head->next == NULL);
+    assert(ft_lstsize(head) == 1);
+
+    // Test 2: Add to a list with one element
+    new_node2 = ft_lstnew("second");
+    ft_lstadd_front(&head, new_node2);
+    assert(head == new_node2);
+    assert(head->next == new_node1);
+    assert(ft_lstsize(head) == 2);
+
+    // Test 3: Add to a list with multiple elements
+    new_node3 = ft_lstnew("third");
+    ft_lstadd_front(&head, new_node3);
+    assert(head == new_node3);
+    assert(head->next == new_node2);
+    assert(new_node2->next == new_node1);
+    assert(ft_lstsize(head) == 3);
+
+    // Clean up memory
+    t_list *current = head;
+    t_list *next;
+    while (current) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    head = NULL; // Reset head
+    printf("✅ test_ft_lstadd_front passed\n");
+}
+
+// Global variable to track if the del function was called
+int del_called = 0;
+void *last_deleted_content = NULL;
+
+// Custom del function for testing
+void test_del(void *content) {
+    del_called++;
+    last_deleted_content = content;
+}
+
+void test_ft_lstclear() {
+    t_list *head = NULL;
+    char *content1 = "one";
+    char *content2 = "two";
+    char *content3 = "three";
+
+    // Test 1: Clear an empty list
+    ft_lstclear(&head, test_del);
+    assert(head == NULL);
+    assert(del_called == 0);
+
+    // Test 2: Clear a list with one element
+    head = ft_lstnew(content1);
+    del_called = 0;
+    last_deleted_content = NULL;
+    ft_lstclear(&head, test_del);
+    assert(head == NULL);
+    assert(del_called == 1);
+    assert(last_deleted_content == content1);
+
+    // Test 3: Clear a list with multiple elements
+    head = ft_lstnew(content1);
+    head->next = ft_lstnew(content2);
+    head->next->next = ft_lstnew(content3);
+    del_called = 0;
+    last_deleted_content = NULL;
+    ft_lstclear(&head, test_del);
+    assert(head == NULL);
+    assert(del_called == 3);
+    // The order of deletion isn't strictly defined, but the count should be correct
+    
+
+    printf("✅ test_ft_lstclear passed\n");
+}
+
+void test_ft_lstdelone() {
+    t_list *node1 = ft_lstnew("one");
+    t_list *node2 = ft_lstnew("two");
+    node1->next = node2;
+
+    // Test 1: Delete a non-NULL node with a non-NULL del function
+    del_called = 0;
+    last_deleted_content = NULL;
+    ft_lstdelone(node1, test_del);
+    assert(del_called == 1);
+    assert(strcmp(last_deleted_content, "one") == 0);
+    // We can't directly assert if node1 is freed as the pointer in the test remains
+    // However, if we try to access it, it should be invalid.
+
+    // Test 2: Delete a NULL node
+    del_called = 0;
+    ft_lstdelone(NULL, test_del);
+    assert(del_called == 0);
+
+    // Test 3: Delete a non-NULL node with a NULL del function
+    t_list *node3 = ft_lstnew("three");
+    del_called = 0;
+    ft_lstdelone(node3, NULL);
+    assert(del_called == 0);
+    free(node3); // We need to free it manually as del wasn't called
+
+    // Clean up remaining (node2)
+    free(node2);
+
+    printf("✅ test_ft_lstdelone passed\n");
+}
+
+// Helper function to print the content of a node (for testing)
+void print_content(void *content) {
+    if (content) {
+        printf("%s\n", (char *)content);
+    } else {
+        printf("(null)\n");
+    }
+}
+
+// Helper function to modify content (append "_modified")
+void modify_content(void *content) {
+    if (!content)
+        return;
+    
+    char *old_str = (char *)content;  // Treat content as a direct string pointer
+    size_t new_len = strlen(old_str) + strlen("_modified") + 1;
+    char *new_str = malloc(new_len);
+    
+    if (!new_str)
+        return;
+    
+    sprintf(new_str, "%s_modified", old_str);
+    strcpy(old_str, new_str);  // Copy the modified string back to the original pointer
+    free(new_str);  // Free the temporary string
+}
+
+void test_ft_lstiter() {
+    t_list *head = NULL;
+
+    // Test 1: Iterate over an empty list
+    ft_lstiter(head, print_content); // Should not print anything
+
+    // Test 2: Iterate over a list with one element
+    head = ft_lstnew(strdup("one"));  // Use strdup here
+    printf("Test 2: Original content:\n");
+    ft_lstiter(head, print_content);
+    printf("Test 2: After iteration (print_content):\n");
+    ft_lstiter(head, print_content);
+    ft_lstclear(&head, free);  // Use ft_lstclear instead of just free
+    head = NULL;
+
+    // Test 3: Iterate over a list with multiple elements
+    head = ft_lstnew(strdup("one"));
+    head->next = ft_lstnew(strdup("two"));
+    head->next->next = ft_lstnew(strdup("three"));
+
+    printf("Test 3: Original content:\n");
+    ft_lstiter(head, print_content);
+    ft_lstiter(head, modify_content);
+
+    printf("Test 3: After iteration (modify_content):\n");
+    ft_lstiter(head, print_content);
+
+    // Cleanup - use ft_lstclear to properly free all nodes and their content
+    ft_lstclear(&head, free);
+    head = NULL;
+    
+    printf("✅ test_ft_lstiter passed\n");
+}
+
+// Helper function to create a simple list for testing
+t_list *create_list(char *s1, char *s2, char *s3) {
+    t_list *head = ft_lstnew(s1);
+    if (s2) {
+        ft_lstadd_back(&head, ft_lstnew(s2));
+    }
+    if (s3) {
+        ft_lstadd_back(&head, ft_lstnew(s3));
+    }
+    return head;
+}
+
+// Helper function to free a list
+void ft_lstfree(t_list *lst) {
+    t_list *temp;
+    while (lst) {
+        temp = lst->next;
+        free(lst);
+        lst = temp;
+    }
+}
+
+void test_ft_lstlast() {
+    t_list *head;
+    t_list *last;
+
+    // Test 1: Empty list
+    head = NULL;
+    last = ft_lstlast(head);
+    assert(last == NULL);
+
+    // Test 2: Single-element list
+    head = ft_lstnew("one");
+    last = ft_lstlast(head);
+    assert(last == head);
+    assert(last->next == NULL);
+    ft_lstfree(head);
+
+    // Test 3: Multi-element list (two elements)
+    head = create_list("one", "two", NULL);
+    last = ft_lstlast(head);
+    assert(last != NULL);
+    assert(strcmp((char *)last->content, "two") == 0);
+    assert(last->next == NULL);
+    ft_lstfree(head);
+
+    // Test 4: Multi-element list (three elements)
+    head = create_list("one", "two", "three");
+    last = ft_lstlast(head);
+    assert(last != NULL);
+    assert(strcmp((char *)last->content, "three") == 0);
+    assert(last->next == NULL);
+    ft_lstfree(head);
+
+    printf("✅ test_ft_lstlast passed\n");
+}
+
+void *duplicate_string(void *str) {
+    if (!str)
+        return NULL;
+    return strdup((char *)str);
+}
+
+// Helper function to free the duplicated string
+void free_duplicated_string(void *str) {
+    free(str);
+}
+
+void test_ft_lstmap() {
+    t_list *head = NULL;
+    t_list *mapped_list = NULL;
+
+    // Test 1: Empty list
+    printf("Test 1: Empty list\n");
+    mapped_list = ft_lstmap(head, duplicate_string, free_duplicated_string);
+    assert(mapped_list == NULL);
+
+    // Test 2: Single-element list
+    head = ft_lstnew("one");
+    printf("\nTest 2: Single-element list\n");
+    printf("Original list:\n");
+    print_content(head->content);
+    mapped_list = ft_lstmap(head, duplicate_string, free_duplicated_string);
+    assert(mapped_list != NULL);
+    printf("Mapped list:\n");
+    print_content(mapped_list->content);
+    assert(strcmp((char *)mapped_list->content, "one") == 0);
+    ft_lstclear(&head, NULL); // Don't free the string literal
+    ft_lstclear(&mapped_list, NULL);
+
+    // Test 3: Multi-element list
+    head = ft_lstnew("one");
+    ft_lstadd_back(&head, ft_lstnew("two"));
+    ft_lstadd_back(&head, ft_lstnew("three"));
+    printf("\nTest 3: Multi-element list\n");
+    printf("Original list:\n");
+    t_list *current = head;
+    while (current) {
+        print_content(current->content);
+        current = current->next;
+    }
+
+    mapped_list = ft_lstmap(head, duplicate_string, free_duplicated_string);
+    assert(mapped_list != NULL);
+
+    printf("Mapped list:\n");
+    current = mapped_list;
+    while (current) {
+        print_content(current->content);
+        current = current->next;
+    }
+
+    // Check content of mapped list
+    assert(strcmp((char *)((t_list *)mapped_list)->content, "one") == 0);
+    assert(strcmp((char *)((t_list *)mapped_list->next)->content, "two") == 0);
+    assert(strcmp((char *)((t_list *)mapped_list->next->next)->content, "three") == 0);
+
+    ft_lstclear(&head, NULL); // Don't free string literals
+    ft_lstclear(&mapped_list, NULL);
+
+    printf("✅ test_ft_lstmap passed\n");
+}
