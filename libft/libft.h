@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <stdint.h>
 
 typedef struct s_list
 {
