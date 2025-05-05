@@ -57,6 +57,7 @@ void test_ft_lstlast(void);
 void test_ft_lstmap(void);
 void test_ft_lstnew(void);
 void test_ft_lstsize(void);
+void test_ft_striteri(void);
 
 int main(void) {
     test_ft_atoi();
@@ -76,6 +77,7 @@ int main(void) {
     test_ft_strnstr();
     test_ft_strjoin();
     test_ft_strmapi();
+	test_ft_striteri();
     test_ft_strrchr();
     test_ft_substr();
     test_ft_strlcpy();
@@ -1079,4 +1081,31 @@ void test_ft_lstmap() {
     ft_lstclear(&mapped_list, NULL);
 
     printf("✅ test_ft_lstmap passed\n");
+}
+
+void test_modifier(unsigned int i, char *c)
+{
+    if (c)
+        *c = *c + i;  // Modify the character based on its position
+}
+
+void test_ft_striteri(void)
+{
+    // Test 1: Normal case with modifiable string
+    char str[] = "hello";  // Note: using array, not string literal
+    printf("Original string: %s\n", str);
+    ft_striteri(str, test_modifier);
+    printf("Modified string: %s\n", str);
+
+    // Test 2: Empty string
+    char empty[] = "";
+    ft_striteri(empty, test_modifier);
+
+    // Test 3: NULL string (should not crash)
+    ft_striteri(NULL, test_modifier);
+
+    // Test 4: NULL function (should not crash)
+    ft_striteri(str, NULL);
+
+    printf("✅ test_ft_striteri passed\n");
 }

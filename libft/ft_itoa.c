@@ -36,7 +36,7 @@ static void	num_str(char *str, long long n, size_t digits)
 		*str = '0';
 	else if (n < 0)
 	{
-		while(digits > 1)
+		while (digits > 1)
 		{
 			*(str + digits - 1) = base[-(n % 10)];
 			n /= 10;
@@ -46,14 +46,15 @@ static void	num_str(char *str, long long n, size_t digits)
 	}
 	else
 	{
-		while(digits > 0)
+		while (digits > 0)
 		{
 			*(str + digits - 1) = base[n % 10];
 			n /= 10;
 			digits--;
 		}
-	}	
+	}
 }
+
 char	*ft_itoa(int n)
 {
 	char		*str;
@@ -63,9 +64,9 @@ char	*ft_itoa(int n)
 	n_long = (long long)n;
 	digits = n_digits(n_long);
 	if (n < 0)
-		digits++;	
+		digits++;
 	str = (char *)malloc(sizeof(*str) * (digits + 1));
-	if(!str)
+	if (!str)
 		return (NULL);
 	num_str(str, n_long, digits);
 	*(str + digits) = '\0';
