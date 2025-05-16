@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 17:58:18 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/16 16:48:24 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:37:10 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ int	ft_print_perc(t_print *tab)
 		return (1);
 	}
 }
+
+// int ft_print_perc(t_print *tab)
+// {
+//     write(1, "%", 1);
+//     tab->total_length += 1;
+//     return (1);
+// }
 
 static int	ft_parse_precision(t_print *tab, char const *format, int j)
 {

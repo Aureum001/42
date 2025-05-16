@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:58:42 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/16 17:03:45 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:37:44 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,7 @@ static int	ft_handle_cleanup(t_print *tab, int ret)
 int	ft_print_perc(t_print *tab)
 {
 	if (tab->width > 1 && !tab->dash)
-	{
-		if (tab->zero)
-			ft_print_zeros(tab->width - 1);
-		else
-			ft_print_padding(tab->width - 1);
-	}
+		ft_print_padding(tab->width - 1);
 	write(1, "%", 1);
 	if (tab->width > 1 && tab->dash)
 		ft_print_padding(tab->width - 1);
@@ -43,6 +38,13 @@ int	ft_print_perc(t_print *tab)
 		return (1);
 	}
 }
+
+// int ft_print_perc(t_print *tab)
+// {
+//     write(1, "%", 1);
+//     tab->total_length += 1;
+//     return (1);
+// }
 
 static int	ft_parse_precision(t_print *tab, char const *format, int j)
 {

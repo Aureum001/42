@@ -6,13 +6,14 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:38:44 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/16 18:17:38 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:27:20 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void ft_print_string_padding(t_print *tab, char *str, int len, int padding)
+static void	ft_print_string_padding(t_print *tab, char *str,
+								int len, int padding)
 {
 	if (tab->dash)
 	{
@@ -28,15 +29,19 @@ static void ft_print_string_padding(t_print *tab, char *str, int len, int paddin
 
 static int	ft_print_null(t_print *tab)
 {
-	int	len;
-	int	padding;
-	char *null_str = "(null)";
-	
-	if (tab->point && tab->precision == 0)
+	int		len;
+	int		padding;
+	char	*null_str;
+
+	null_str = "(null)";
+	if (tab->point)
 	{
-		ft_print_padding(tab->width);
-		tab->total_length += tab->width;
-		return (tab->width);
+		if (tab->precision < 6)
+		{
+			ft_print_padding(tab->width);
+			tab->total_length += tab->width;
+			return (tab->width);
+		}
 	}
 	len = 6;
 	if (tab->point && tab->precision < len)
@@ -67,16 +72,7 @@ int	ft_print_s(t_print *tab)
 	padding = 0;
 	if (tab->width > len)
 		padding = tab->width - len;
-	if (tab->dash)
-	{
-		write(1, str, len);
-		ft_print_padding(padding);
-	}
-	else
-	{
-		ft_print_padding(padding);
-		write(1, str, len);
-	}
+	ft_print_string_padding(tab, str, len, padding);
 	tab->total_length += len + padding;
 	return (len + padding);
 }
