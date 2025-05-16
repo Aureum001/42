@@ -16,8 +16,6 @@ char	*ft_strnstr(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 
-	if (!s1 || !s2)
-		return (NULL);
 	if (!*s2)
 		return ((char *)s1);
 	while (*s1 && n)

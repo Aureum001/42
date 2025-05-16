@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 19:20:48 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 19:20:48 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/04 14:24:29 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/04 14:24:29 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char *str, int c)
+void	ft_putstr_fd(char const *s, int fd)
 {
-	int	len;
-
-	len = ft_strlen(str);
-	while (len && *(str + len) != (char)c)
-		len--;
-	if (*(str + len) == (char)c)
-		return ((char *)(str + len));
-	return (NULL);
+	if (!s)
+		return ;
+	while (*s)
+		ft_putchar_fd(*s++, fd);
 }

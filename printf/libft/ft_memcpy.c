@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 19:20:48 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 19:20:48 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 16:56:10 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 16:56:10 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char *str, int c)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	int	len;
+	char	*buf;
 
-	len = ft_strlen(str);
-	while (len && *(str + len) != (char)c)
-		len--;
-	if (*(str + len) == (char)c)
-		return ((char *)(str + len));
-	return (NULL);
+	if (dest == src || !n)
+		return (dest);
+	buf = (char *)dest;
+	while (n--)
+		*(char *)dest++ = *(char *)src++;
+	return (buf);
 }

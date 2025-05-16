@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 19:20:48 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 19:20:48 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 16:29:29 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 16:29:29 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char *str, int c)
+size_t	ft_strlen(const char *str)
 {
-	int	len;
+	size_t	len;
 
-	len = ft_strlen(str);
-	while (len && *(str + len) != (char)c)
-		len--;
-	if (*(str + len) == (char)c)
-		return ((char *)(str + len));
-	return (NULL);
+	if (!str)
+		return (0);
+	len = 0;
+	while (*str++)
+		len++;
+	return (len);
 }

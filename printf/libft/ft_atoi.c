@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <antonioayr.94@gmail.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/03 21:12:22 by ancanale          #+#    #+#             */
-/*   Updated: 2025/03/03 21:12:22 by ancanale         ###   ########.fr       */
+/*   Created: 2025/03/03 15:46:06 by ancanale          #+#    #+#             */
+/*   Updated: 2025/03/03 15:46:06 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *src)
+int	ft_atoi(const char *str)
 {
-	char	*str;
-	size_t	len;
+	int				sign;
+	unsigned int	result;
 
-	len = ft_strlen(src);
-	str = (char *)malloc(sizeof(*src) * (len + 1));
-	if (!str)
+	sign = 1;
+	result = 0;
+	while ((*str >= '\t' && *str <= '\r') || *str == ' ')
+		str++;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '+' || *str == '-')
+		str++;
+	while (ft_isdigit(*str))
 	{
-		return (NULL);
+		result = result * 10 + *str++ - '0';
+		if (result > 2147483648 && sign == -1)
+			return (0);
+		if (result > 2147483647 && sign == 1)
+			return (0);
 	}
-	ft_strlcpy(str, src, len + 1);
-	return (str);
+	return ((int)result * sign);
 }
