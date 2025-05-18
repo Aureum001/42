@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/18 16:15:02 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:27:05 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,23 @@ static char	*read_file(int fd, char *buffer)
 {
 	char	*read_buf;
 	int		bytes_read;
+	char	*temp;
 
 	if (!buffer)
 		buffer = ft_strdup("");
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
-		return (NULL);
+		return (buffer = NULL, NULL);
 	bytes_read = 1;
 	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-			return (free(buffer), NULL);
+			return (free(buffer), free(read_buf), NULL);
 		read_buf[bytes_read] = '\0';
+		temp = buffer;
 		buffer = ft_strjoin(buffer, read_buf);
+		free(temp);
 		if (!buffer)
 			break ;
 	}
@@ -71,7 +74,7 @@ static char	*update_buffer(char *buffer)
 	int		j;
 
 	if (!buffer)
-        return (NULL);
+		return (NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
@@ -112,7 +115,10 @@ char	*get_next_line(int fd)
 	char				*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (NULL);
+	{
+		if (fd >= 0)
+			return (free_fd_node(&fd_list, fd), NULL);
+	}
 	node = get_or_create_node(fd, &fd_list);
 	if (!node)
 		return (NULL);
@@ -123,9 +129,7 @@ char	*get_next_line(int fd)
 	if (!line)
 	{
 		free(node->buffer);
-		node->buffer = NULL;
-		free_fd_node(&fd_list, fd);
-		return (NULL);
+		return (node->buffer = NULL, free_fd_node(&fd_list, fd), NULL);
 	}
 	node->buffer = update_buffer(node->buffer);
 	if (!node->buffer)

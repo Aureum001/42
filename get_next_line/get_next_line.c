@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/18 16:11:06 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:33:56 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static char	*read_file(int fd, char *buffer)
 {
 	char	*read_buf;
 	int		bytes_read;
+	char	*temp;
 
 	if (!buffer)
 		buffer = ft_strdup("");
@@ -27,12 +28,11 @@ static char	*read_file(int fd, char *buffer)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-		{
-			free(read_buf);
-			return (NULL);
-		}
+			return (free(buffer), free(read_buf), NULL);
 		read_buf[bytes_read] = '\0';
+		temp = buffer;
 		buffer = ft_strjoin(buffer, read_buf);
+		free(temp);
 		if (!buffer)
 			break ;
 	}
@@ -98,10 +98,17 @@ char	*get_next_line(int fd)
 	char				*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	{
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
+	}
 	buffer = read_file(fd, buffer);
 	if (!buffer)
+	{
+		buffer = NULL;
 		return (NULL);
+	}
 	line = extract_line(buffer);
 	if (!line)
 	{
