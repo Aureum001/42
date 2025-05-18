@@ -1,45 +1,37 @@
+CFLAGS = -Wall -Wextra -Werror
+CC		= cc
+RM		= rm -f
 NAME = get_next_line.a
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+SRCS = get_next_line.c \
+	get_next_line_utils.c \
 
-SRC = get_next_line.c \
-	node_utils.c
+SRCS_B = get_next_line_bonus.c \
+	get_next_line_utils_bonus.c \
+	get_next_line_utils.c
 
-OBJ = $(SRC:.c=.o)
+OBJS	= ${SRCS:.c=.o}
+OBJS_B  = ${SRCS_B:.c=.o}
 
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
+$(NAME): $(OBJS)
+	$(MAKE) $(OBJS)
+	ar rcs $(NAME) $(OBJS)
 
-SRC_BONUS = get_next_line_bonus.c \
-	node_utils.c
-
-OBJ_BONUS = $(SRC_BONUS:.c=.o)
-
-all: $(NAME)
-
-$(NAME): $(OBJ) | $(LIBFT)
-	cp $(LIBFT) $(NAME)
-	ar rcs $(NAME) $(OBJ)
-
-bonus: $(OBJ_BONUS) | $(LIBFT)
-	cp $(LIBFT) $(NAME)
-	ar rcs $(NAME) $(OBJ_BONUS)
-
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+bonus: $(OBJS_B)
+	$(MAKE) $(OBJS_B)
+	ar rcs $(NAME) $(OBJS_B)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+all:		${NAME}
+
 clean:
-	rm -f $(OBJ) $(OBJ_BONUS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+			${RM} ${OBJS} ${OBJS_B}
 
-fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+fclean:		clean
+					${RM} ${NAME}
 
-re: fclean all
+re:			fclean all
 
-.PHONY: all clean fclean re bonus
+.PHONY: re clean fclean all

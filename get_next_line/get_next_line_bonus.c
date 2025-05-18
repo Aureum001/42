@@ -6,17 +6,19 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/18 14:21:41 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 16:15:02 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*read_file(int fd, char *buffer)
 {
 	char	*read_buf;
 	int		bytes_read;
 
+	if (!buffer)
+		buffer = ft_strdup("");
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
 		return (NULL);
@@ -25,10 +27,7 @@ static char	*read_file(int fd, char *buffer)
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-		{
-			free(read_buf);
-			return (NULL);
-		}
+			return (free(buffer), NULL);
 		read_buf[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, read_buf);
 		if (!buffer)
@@ -71,21 +70,17 @@ static char	*update_buffer(char *buffer)
 	int		i;
 	int		j;
 
+	if (!buffer)
+        return (NULL);
 	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (!buffer[i])
-	{
-		free(buffer);
-		return (NULL);
-	}
+		return (free(buffer), NULL);
 	i++;
 	new_buffer = malloc(ft_strlen(buffer) - i + 1);
 	if (!new_buffer)
-	{
-		free(buffer);
-		return (NULL);
-	}
+		return (free(buffer), NULL);
 	j = 0;
 	while (buffer[i])
 		new_buffer[j++] = buffer[i++];
@@ -120,16 +115,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	node = get_or_create_node(fd, &fd_list);
 	if (!node)
-	{
 		return (NULL);
-	}
 	node->buffer = read_file(node->fd, node->buffer);
 	if (!node->buffer)
+		return (free_fd_node(&fd_list, fd), NULL);
+	line = extract_line(node->buffer);
+	if (!line)
 	{
+		free(node->buffer);
+		node->buffer = NULL;
 		free_fd_node(&fd_list, fd);
 		return (NULL);
 	}
-	line = extract_line(node->buffer);
 	node->buffer = update_buffer(node->buffer);
 	if (!node->buffer)
 		free_fd_node(&fd_list, fd);
