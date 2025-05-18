@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/18 18:27:05 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:32:47 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,47 +92,29 @@ static char	*update_buffer(char *buffer)
 	return (new_buffer);
 }
 
-static t_fd_list	*get_or_create_node(int fd, t_fd_list **fd_list)
-{
-	t_fd_list	*node;
-
-	node = find_fd_node(fd_list, fd);
-	if (!node)
-	{
-		node = create_fd_node(fd);
-		if (!node)
-			return (NULL);
-		node->next = *fd_list;
-		*fd_list = node;
-	}
-	return (node);
-}
-
 char	*get_next_line(int fd)
 {
-	static t_fd_list	*fd_list;
-	t_fd_list			*node;
-	char				*line;
+	static char		*buffers[FD_MAX];
+	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		if (fd >= 0)
-			return (free_fd_node(&fd_list, fd), NULL);
-	}
-	node = get_or_create_node(fd, &fd_list);
-	if (!node)
+		if (fd >= 0 && fd < FD_MAX && buffers[fd])
+		{
+			free(buffers[fd]);
+			buffers[fd] = NULL;
+		}
 		return (NULL);
-	node->buffer = read_file(node->fd, node->buffer);
-	if (!node->buffer)
-		return (free_fd_node(&fd_list, fd), NULL);
-	line = extract_line(node->buffer);
+	}
+	buffers[fd] = read_file(fd, buffers[fd]);
+	if (!buffers[fd])
+		return (NULL);
+	line = extract_line(buffers[fd]);
 	if (!line)
 	{
-		free(node->buffer);
-		return (node->buffer = NULL, free_fd_node(&fd_list, fd), NULL);
+		free(buffers[fd]);
+		return (buffers[fd] = NULL, NULL);
 	}
-	node->buffer = update_buffer(node->buffer);
-	if (!node->buffer)
-		free_fd_node(&fd_list, fd);
+	buffers[fd] = update_buffer(buffers[fd]);
 	return (line);
 }

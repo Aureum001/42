@@ -8,7 +8,6 @@ SRCS = get_next_line.c \
 
 SRCS_B = get_next_line_bonus.c \
 	get_next_line_utils_bonus.c \
-	get_next_line_utils.c
 
 OBJS	= ${SRCS:.c=.o}
 OBJS_B  = ${SRCS_B:.c=.o}
