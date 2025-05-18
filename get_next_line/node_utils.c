@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 10:25:15 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/17 10:25:15 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:04:07 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,22 @@ t_fd_list	*create_fd_node(int fd)
 	return (new_node);
 }
 
+static void	search_and_free(t_fd_list *prev, t_fd_list *current, int fd)
+{
+	while (current)
+	{
+		if (current->fd == fd)
+		{
+			prev->next = current->next;
+			free(current->buffer);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
 void	free_fd_node(t_fd_list **list, int fd)
 {
 	t_fd_list	*current;
@@ -58,16 +74,5 @@ void	free_fd_node(t_fd_list **list, int fd)
 	}
 	prev = *list;
 	current = prev->next;
-	while (current)
-	{
-		if (current->fd == fd)
-		{
-			prev->next = current->next;
-			free(current->buffer);
-			free(current);
-			return ;
-		}
-		prev = current;
-		current = current->next;
-	}
+	search_and_free(prev, current, fd);
 }
