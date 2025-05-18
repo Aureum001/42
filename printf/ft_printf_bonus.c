@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 17:58:18 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/17 14:52:11 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:59:08 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ static int	ft_parse_precision(t_print *tab, char const *format, int j)
 int	ft_parse_flag(t_print *tab, char const *format, int j)
 {
 	if (format[j] == '-')
+	{
 		tab->dash = 1;
+		while (format[j] == '-')
+			j++;
+		return (j);
+	}
 	else if (format[j] == '+')
 		tab->plus = 1;
 	else if (format[j] == ' ')
@@ -52,14 +57,11 @@ int	ft_parse_flag(t_print *tab, char const *format, int j)
 	else if (format[j] == '0' && !tab->point)
 		tab->zero = 1;
 	else if (format[j] == '.')
-		return (ft_parse_precision(tab, format, j));
+		return (tab->zero = 0, ft_parse_precision(tab, format, j));
 	else if (format[j] >= '0' && format[j] <= '9')
 	{
 		while (format[j] >= '0' && format[j] <= '9')
-		{
-			tab->width = tab->width * 10 + (format[j] - '0');
-			j++;
-		}
+			tab->width = tab->width * 10 + (format[j++] - '0');
 		return (j);
 	}
 	return (j + 1);
