@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:37:17 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/16 17:29:07 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:07:36 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int	ft_eval_format(t_print *tab, char const *format, int i)
 	int	j;
 
 	j = i;
+	if (!format[j])
+		return (write(1, "%", 1), tab->total_length++, j);
 	while (format[j] && ft_is_flag(format[j]))
 		j = ft_parse_flag(tab, format, j);
 	if (format[j] == 's')

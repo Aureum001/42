@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:58:42 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/17 14:52:23 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:29:02 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@ static int	ft_handle_cleanup(t_print *tab, int ret)
 	ret += tab->total_length;
 	free(tab);
 	return (ret);
-}
-
-int	ft_print_perc(t_print *tab)
-{
-	write(1, "%", 1);
-	tab->total_length += 1;
-	return (1);
 }
 
 static int	ft_parse_precision(t_print *tab, char const *format, int j)
