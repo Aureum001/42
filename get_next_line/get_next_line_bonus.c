@@ -16,23 +16,24 @@ static char	*read_file(int fd, char *buffer)
 {
 	char	*read_buf;
 	int		bytes_read;
-	char	*temp;
 
 	if (!buffer)
 		buffer = ft_strdup("");
 	read_buf = malloc(BUFFER_SIZE + 1);
 	if (!read_buf)
-		return (buffer = NULL, NULL);
+		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
 		bytes_read = read(fd, read_buf, BUFFER_SIZE);
 		if (bytes_read < 0)
-			return (free(buffer), free(read_buf), NULL);
+		{
+			free(buffer);
+			free(read_buf);
+			return (NULL);
+		}
 		read_buf[bytes_read] = '\0';
-		temp = buffer;
 		buffer = ft_strjoin(buffer, read_buf);
-		free(temp);
 		if (!buffer)
 			break ;
 	}
@@ -70,26 +71,35 @@ static char	*extract_line(char *buffer)
 static char	*update_buffer(char *buffer)
 {
 	char	*new_buffer;
-	int		i;
-	int		j;
+	char	*newline_ptr;
 
 	if (!buffer)
 		return (NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (!buffer[i])
-		return (free(buffer), NULL);
-	i++;
-	new_buffer = malloc(ft_strlen(buffer) - i + 1);
+	newline_ptr = ft_strchr(buffer, '\n');
+	if (!newline_ptr)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	newline_ptr++;
+	new_buffer = malloc(ft_strlen(buffer) - (newline_ptr - buffer) + 1);
 	if (!new_buffer)
-		return (free(buffer), NULL);
-	j = 0;
-	while (buffer[i])
-		new_buffer[j++] = buffer[i++];
-	new_buffer[j] = '\0';
+	{
+		free(buffer);
+		return (NULL);
+	}
+	ft_strlcpy(new_buffer, newline_ptr, ft_strlen(newline_ptr) + 1);
 	free(buffer);
 	return (new_buffer);
+}
+
+static void	clean_buffer_fd(char **buffers, int fd)
+{
+	if (fd >= 0 && fd < FD_MAX && buffers[fd])
+	{
+		free(buffers[fd]);
+		buffers[fd] = NULL;
+	}
 }
 
 char	*get_next_line(int fd)
@@ -99,11 +109,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		if (fd >= 0 && fd < FD_MAX && buffers[fd])
-		{
-			free(buffers[fd]);
-			buffers[fd] = NULL;
-		}
+		clean_buffer_fd(buffers, fd);
 		return (NULL);
 	}
 	buffers[fd] = read_file(fd, buffers[fd]);
@@ -112,8 +118,8 @@ char	*get_next_line(int fd)
 	line = extract_line(buffers[fd]);
 	if (!line)
 	{
-		free(buffers[fd]);
-		return (buffers[fd] = NULL, NULL);
+		clean_buffer_fd(buffers, fd);
+		return (NULL);
 	}
 	buffers[fd] = update_buffer(buffers[fd]);
 	return (line);

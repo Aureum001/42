@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (len);
 }
 
-static size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	const char	*buf;
 
@@ -67,6 +67,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	ft_strlcpy(str, s1, len1 + 1);
 	ft_strlcpy(str + len1, s2, len2 + 1);
+	free(s1);
 	return (str);
 }
 
