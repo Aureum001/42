@@ -44,27 +44,19 @@ static char	*read_file(int fd, char *buffer)
 static char	*extract_line(char *buffer)
 {
 	char	*line;
-	int		i;
+	char	*ptr;
 
-	i = 0;
 	if (!buffer || !buffer[0])
 		return (NULL);
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
-	line = malloc(i + 1);
+	ptr = buffer;
+	while (*ptr && *ptr != '\n')
+		ptr++;
+	if (*ptr == '\n')
+		ptr++;
+	line = malloc(ptr - buffer + 1);
 	if (!line)
 		return (NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-	if (buffer[i] == '\n')
-		line[i++] = '\n';
-	line[i] = '\0';
+	ft_strlcpy(line, buffer, ptr - buffer + 1);
 	return (line);
 }
 
