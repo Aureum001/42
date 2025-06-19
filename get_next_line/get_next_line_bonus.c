@@ -6,22 +6,17 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/18 19:32:47 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:05:13 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static char	*read_file(int fd, char *buffer)
+static char	*process_reading(int fd, char *buffer, char *read_buf)
 {
-	char	*read_buf;
+	char	*temp;
 	int		bytes_read;
 
-	if (!buffer)
-		buffer = ft_strdup("");
-	read_buf = malloc(BUFFER_SIZE + 1);
-	if (!read_buf)
-		return (NULL);
 	bytes_read = 1;
 	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
@@ -33,12 +28,36 @@ static char	*read_file(int fd, char *buffer)
 			return (NULL);
 		}
 		read_buf[bytes_read] = '\0';
-		buffer = ft_strjoin(buffer, read_buf);
-		if (!buffer)
-			break ;
+		temp = ft_strjoin(buffer, read_buf);
+		if (!temp)
+		{
+			free(buffer);
+			free(read_buf);
+			return (NULL);
+		}
+		buffer = temp;
 	}
 	free(read_buf);
 	return (buffer);
+}
+
+static char	*read_file(int fd, char *buffer)
+{
+	char	*read_buf;
+
+	if (!buffer)
+	{
+		buffer = ft_strdup("");
+		if (!buffer)
+			return (NULL);
+	}
+	read_buf = malloc(BUFFER_SIZE + 1);
+	if (!read_buf)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	return (process_reading(fd, buffer, read_buf));
 }
 
 static char	*extract_line(char *buffer)
@@ -85,23 +104,15 @@ static char	*update_buffer(char *buffer)
 	return (new_buffer);
 }
 
-static void	clean_buffer_fd(char **buffers, int fd)
+char	*get_next_line(int fd)
 {
-	if (fd >= 0 && fd < FD_MAX && buffers[fd])
+	static char		*buffers[1024];
+	char			*line;
+
+	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
 		free(buffers[fd]);
 		buffers[fd] = NULL;
-	}
-}
-
-char	*get_next_line(int fd)
-{
-	static char		*buffers[FD_MAX];
-	char			*line;
-
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-	{
-		clean_buffer_fd(buffers, fd);
 		return (NULL);
 	}
 	buffers[fd] = read_file(fd, buffers[fd]);
@@ -110,7 +121,8 @@ char	*get_next_line(int fd)
 	line = extract_line(buffers[fd]);
 	if (!line)
 	{
-		clean_buffer_fd(buffers, fd);
+		free(buffers[fd]);
+		buffers[fd] = NULL;
 		return (NULL);
 	}
 	buffers[fd] = update_buffer(buffers[fd]);

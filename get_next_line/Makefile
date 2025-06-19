@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -D BUFFER_SIZE=42
 CC		= cc
 RM		= rm -f
 NAME = get_next_line.a
@@ -33,4 +33,13 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY: re clean fclean all
+test:		$(NAME)
+		$(CC) $(CFLAGS) gnl_test.c $(NAME) -o test
+		./test
+
+test_bonus:	bonus
+		$(CC) $(CFLAGS) -D BONUS gnl_test.c $(NAME) -o test
+		./test
+		$(RM) test
+
+.PHONY: re clean fclean all test test_bonus
