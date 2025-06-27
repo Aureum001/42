@@ -6,11 +6,28 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 00:00:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/13 13:48:58 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:52:35 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
+
+static void	skip_whitespace(const char *str, int *i)
+{
+	while (str[*i] == ' ' || (str[*i] >= '\t' && str[*i] <= '\r'))
+		(*i)++;
+}
+
+static void	handle_sign(const char *str, int *i, int *sign)
+{
+	*sign = 1;
+	if (str[*i] == '-' || str[*i] == '+')
+	{
+		if (str[*i] == '-')
+			*sign = -1;
+		(*i)++;
+	}
+}
 
 long	ft_atol_ps(const char *str, int *error_flag)
 {
@@ -19,17 +36,10 @@ long	ft_atol_ps(const char *str, int *error_flag)
 	int		i;
 
 	result = 0;
-	sign = 1;
 	i = 0;
 	*error_flag = 0;
-	while (str[i] == ' ' || (str[i] >= '\t' && str[i] <= '\r'))
-		i++;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
+	skip_whitespace(str, &i);
+	handle_sign(str, &i, &sign);
 	if (str[i] == '\0')
 		*error_flag = 1;
 	while (str[i] >= '0' && str[i] <= '9')
@@ -49,9 +59,9 @@ void	add_node_to_stack_end(t_stack **stack, int value)
 
 	new_node = (t_stack *)malloc(sizeof(t_stack));
 	if (!new_node)
-		return ; // Proper error handling would involve freeing existing stack
+		return ;
 	new_node->value = value;
-	new_node->index = 0; // Index will be assigned later
+	new_node->index = 0;
 	new_node->next = NULL;
 	if (!*stack)
 	{

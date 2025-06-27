@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/19 10:51:06 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:45:22 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	sa(t_data *data, int print)
 {
 	swap(&data->stack_a);
 	if (print)
-		add_move("sa");
+		add_move(data, "sa");
 }
 
 void	sb(t_data *data, int print)
 {
 	swap(&data->stack_b);
 	if (print)
-		add_move("sb");
+		add_move(data, "sb");
 }
 
 void	ss(t_data *data, int print)
@@ -45,5 +45,5 @@ void	ss(t_data *data, int print)
 	swap(&data->stack_a);
 	swap(&data->stack_b);
 	if (print)
-		add_move("ss");
+		add_move(data, "ss");
 }

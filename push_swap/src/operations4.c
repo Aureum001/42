@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/19 10:52:59 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:46:03 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	rrb(t_data *data, int print)
 {
 	reverse_rotate(&data->stack_b);
 	if (print)
-		add_move("rrb");
+		add_move(data, "rrb");
 }
 
 void	rrr(t_data *data, int print)
@@ -40,5 +40,5 @@ void	rrr(t_data *data, int print)
 	reverse_rotate(&data->stack_a);
 	reverse_rotate(&data->stack_b);
 	if (print)
-		add_move("rrr");
+		add_move(data, "rrr");
 }

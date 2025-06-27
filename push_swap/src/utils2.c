@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/12 11:03:05 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:55:15 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	free_data(t_data *data)
 		return ;
 	free_stack(&data->stack_a);
 	free_stack(&data->stack_b);
+	if (data->buffer.count > 0)
+		free_buffer(data);
 }
 
 void	error_exit(t_data *data)

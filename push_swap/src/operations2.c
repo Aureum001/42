@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 11:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/19 10:51:51 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:45:38 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	pa(t_data *data, int print)
 	data->size_a++;
 	data->size_b--;
 	if (print)
-		add_move("pa");
+		add_move(data, "pa");
 }
 
 void	pb(t_data *data, int print)
@@ -39,7 +39,7 @@ void	pb(t_data *data, int print)
 	data->size_b++;
 	data->size_a--;
 	if (print)
-		add_move("pb");
+		add_move(data, "pb");
 }
 
 static void	rotate(t_stack **stack)
@@ -60,5 +60,5 @@ void	ra(t_data *data, int print)
 {
 	rotate(&data->stack_a);
 	if (print)
-		add_move("ra");
+		add_move(data, "ra");
 }

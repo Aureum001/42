@@ -1,51 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_buffer.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/19 12:28:03 by ancanale          #+#    #+#             */
+/*   Updated: 2025/06/23 11:50:18 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-#define MOVE_BUF_SIZE 20000
-
-static char *move_buffer[MOVE_BUF_SIZE];
-static int move_count = 0;
-
-void add_move(const char *move)
+void	add_move(t_data *data, const char *move)
 {
-	if (move_count < MOVE_BUF_SIZE)
-		move_buffer[move_count++] = ft_strdup(move);
+	if (data->buffer.count < MOVE_BUF_SIZE)
+		data->buffer.moves[data->buffer.count++] = ft_strdup(move);
 }
 
-void print_optimized_moves(void)
+static int	try_combine_moves(t_data *data, int *i)
 {
-	int i = 0;
-	while (i < move_count)
+	char	*move1;
+	char	*move2;
+
+	if (*i + 1 >= data->buffer.count)
+		return (0);
+	move1 = data->buffer.moves[*i];
+	move2 = data->buffer.moves[*i + 1];
+	if ((!ft_strncmp(move1, "ra", 4) && !ft_strncmp(move2, "rb", 4))
+		|| (!ft_strncmp(move1, "rb", 4) && !ft_strncmp(move2, "ra", 4)))
+		ft_putstr_fd("rr\n", 1);
+	else if ((!ft_strncmp(move1, "rra", 4) && !ft_strncmp(move2, "rrb", 4))
+		|| (!ft_strncmp(move1, "rrb", 4) && !ft_strncmp(move2, "rra", 4)))
+		ft_putstr_fd("rrr\n", 1);
+	else if ((!ft_strncmp(move1, "sa", 4) && !ft_strncmp(move2, "sb", 4))
+		|| (!ft_strncmp(move1, "sb", 4) && !ft_strncmp(move2, "sa", 4)))
+		ft_putstr_fd("ss\n", 1);
+	else
+		return (0);
+	*i += 2;
+	return (1);
+}
+
+void	free_buffer(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->buffer.count)
 	{
-		if (i + 1 < move_count)
-		{
-			if ((!ft_strncmp(move_buffer[i], "ra", 2) && !ft_strncmp(move_buffer[i+1], "rb", 2)) ||
-				(!ft_strncmp(move_buffer[i], "rb", 2) && !ft_strncmp(move_buffer[i+1], "ra", 2)))
-			{
-				ft_putstr_fd("rr\n", 1);
-				i += 2;
-				continue;
-			}
-			if ((!ft_strncmp(move_buffer[i], "rra", 3) && !ft_strncmp(move_buffer[i+1], "rrb", 3)) ||
-				(!ft_strncmp(move_buffer[i], "rrb", 3) && !ft_strncmp(move_buffer[i+1], "rra", 3)))
-			{
-				ft_putstr_fd("rrr\n", 1);
-				i += 2;
-				continue;
-			}
-			if ((!ft_strncmp(move_buffer[i], "sa", 2) && !ft_strncmp(move_buffer[i+1], "sb", 2)) ||
-				(!ft_strncmp(move_buffer[i], "sb", 2) && !ft_strncmp(move_buffer[i+1], "sa", 2)))
-			{
-				ft_putstr_fd("ss\n", 1);
-				i += 2;
-				continue;
-			}
-		}
-		ft_putstr_fd(move_buffer[i], 1);
-		ft_putstr_fd("\n", 1);
+		free(data->buffer.moves[i]);
 		i++;
 	}
-	// Free the buffer
-	for (i = 0; i < move_count; i++)
-		free(move_buffer[i]);
-	move_count = 0;
+	data->buffer.count = 0;
+}
+
+void	print_optimized_moves(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->buffer.count)
+	{
+		if (!try_combine_moves(data, &i))
+		{
+			ft_putstr_fd(data->buffer.moves[i], 1);
+			ft_putstr_fd("\n", 1);
+			i++;
+		}
+	}
+	free_buffer(data);
 }

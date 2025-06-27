@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   checker_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/04 11:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/06/19 12:32:12 by ancanale         ###   ########.fr       */
+/*   Created: 2025/06/12 10:52:06 by ancanale          #+#    #+#             */
+/*   Updated: 2025/06/23 12:37:14 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
+#include "../includes/push_swap_bonus.h"
 
 static void	init_data(t_data *data)
 {
@@ -42,21 +43,12 @@ static void	parse_arguments(t_data *data, int argc, char **argv)
 		error_exit(data);
 }
 
-void	push_swap(t_data *data)
+static void	print_result(t_data *data)
 {
-	if (is_sorted(data->stack_a))
-		return ;
-	if (data->size_a == 2)
-	{
-		if (data->stack_a->value > data->stack_a->next->value)
-			sa(data, 1);
-	}
-	else if (data->size_a == 3)
-		sort_three(data);
-	else if (data->size_a <= 5)
-		sort_five(data);
+	if (is_sorted(data->stack_a) && data->size_b == 0)
+		ft_putstr_fd("OK\n", 1);
 	else
-		greedy_sort(data);
+		ft_putstr_fd("KO\n", 1);
 }
 
 int	main(int argc, char **argv)
@@ -69,10 +61,8 @@ int	main(int argc, char **argv)
 	if (!is_valid_input(argc, argv))
 		error_exit(&data);
 	parse_arguments(&data, argc, argv);
-	push_swap(&data);
-	print_optimized_moves(&data);
-	if (!is_sorted(data.stack_a))
-		ft_printf("Not sorted");
+	process_commands(&data);
+	print_result(&data);
 	free_data(&data);
 	return (0);
 }
