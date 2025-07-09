@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 18:41:20 by ancanale          #+#    #+#             */
-/*   Updated: 2025/05/24 12:05:13 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:21:15 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,9 @@ char	*get_next_line(int fd)
 	static char		*buffers[1024];
 	char			*line;
 
-	if (fd < 0 || fd >= 1024 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || fd >= 1024)
+		return (NULL);
+	if (BUFFER_SIZE <= 0)
 	{
 		free(buffers[fd]);
 		buffers[fd] = NULL;
