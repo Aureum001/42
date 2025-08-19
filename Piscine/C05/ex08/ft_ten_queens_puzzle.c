@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdio.h>
 
 int	is_safe(int row, int board[])
 {
@@ -77,4 +78,11 @@ int	ft_ten_queens_puzzle(void)
 		board[i++] = 0;
 	place_queen(0, &solutions, board);
 	return (solutions);
+}
+
+int	main()
+{
+	int solutions = ft_ten_queens_puzzle();
+	printf("%d Soluciones", solutions);
+	return (0);
 }
