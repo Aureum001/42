@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/29 09:41:57 by ancanale          #+#    #+#             */
-/*   Updated: 2025/07/29 10:28:25 by ancanale         ###   ########.fr       */
+/*   Created: 2025/07/29 10:20:00 by ancanale          #+#    #+#             */
+/*   Updated: 2025/07/30 09:52:19 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+#include "pipex_bonus.h"
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -42,7 +43,10 @@ static void	launch_middle_children(int argc, char **argv,
 {
 	int		i;
 
-	i = 2;
+	if (px->here_doc)
+		i = 3;
+	else
+		i = 2;
 	px->prev_fd = px->infile_fd;
 	while (i < argc - 2)
 	{
@@ -68,8 +72,19 @@ static void	pipex(int argc, char **argv, char **envp)
 {
 	t_pipex	px;
 
-	px.infile_fd = open_infile(argv[1]);
-	px.outfile_fd = open_outfile(argv[argc - 1]);
+	px.here_doc = 0;
+	if (!ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])))
+		px.here_doc = 1;
+	if (px.here_doc)
+	{
+		px.infile_fd = handle_here_doc(argv[2]);
+		px.outfile_fd = open_outfile_append(argv[argc - 1]);
+	}
+	else
+	{
+		px.infile_fd = open_infile(argv[1]);
+		px.outfile_fd = open_outfile(argv[argc - 1]);
+	}
 	launch_middle_children(argc, argv, envp, &px);
 	px.pid = fork();
 	if (px.pid < 0)
@@ -84,9 +99,10 @@ static void	pipex(int argc, char **argv, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	if (argc != 5)
+	if (argc < 5)
 	{
-		write(2, "Usage: ./pipex infile cmd1 cmd2 outfile\n", 41);
+		write(2, "Usage: ./pipex infile cmd1 ... cmdN outfile\n", 44);
+		write(2, "   or: ./pipex here_doc LIMITER cmd1 ... cmdN outfile\n", 56);
 		return (1);
 	}
 	pipex(argc, argv, envp);
