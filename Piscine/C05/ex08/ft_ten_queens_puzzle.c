@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:20:13 by ancanale          #+#    #+#             */
-/*   Updated: 2025/02/11 17:19:27 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/08/29 10:35:31 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 int	is_safe(int row, int board[])
 {
 	int	i;
-	int	tmp;
-
-	i = 0;
+	int	tmp; 
+			  
+	i = 0;    
 	while (i < row)
 	{
 		tmp = board[row] - board[i];
@@ -36,7 +36,7 @@ void	board_print(int board[])
 	int		i;
 	char	tmp;
 
-	i = 0;
+	i = 0; 
 	while (i < 10)
 	{
 		tmp = board[i] + '0';
