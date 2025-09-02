@@ -2,13 +2,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static char *build_prompt(char *path_part)
+static char *build_prompt(char *path_part, char **envp)
 {
 	char	*user;
 	char	*prompt;
 	char	*temp;
 
-	user = getenv("USER");
+	user = get_env_value(envp, "USER");
 	if (user)
 	{
 		prompt = ft_strjoin(ft_strdup(user), ":");
@@ -22,7 +22,7 @@ static char *build_prompt(char *path_part)
 	}
 }
 
-char	*generate_prompt(void)
+char	*generate_prompt(char **envp)
 {
 	char	cwd[1024];
 	char	*home;
@@ -32,7 +32,7 @@ char	*generate_prompt(void)
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (ft_strdup("minishell> "));
-	home = getenv("HOME");
+	home = get_env_value(envp, "HOME");
 	if (home && ft_strncmp(cwd, home, ft_strlen(home)) == 0)
 	{
 		tilde = ft_strdup("~");
@@ -42,7 +42,7 @@ char	*generate_prompt(void)
 	{
 		path_part = ft_strdup(cwd);
 	}
-	prompt = ft_strjoin(build_prompt(path_part), "> ");
+	prompt = ft_strjoin(build_prompt(path_part, envp), "> ");
 	free(path_part);
 	return (prompt);
 }

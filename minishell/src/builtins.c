@@ -15,7 +15,7 @@ int	execute_cd(t_cmd *cmd)
 	path = cmd->argv[1];
 	if (!path)
 	{
-		path = getenv("HOME");
+		path = get_env_value(cmd->envp, "HOME");
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);

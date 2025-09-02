@@ -36,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	last_status = 0;
 	while (1)
 	{
-		prompt = generate_prompt();
+		prompt = generate_prompt(shell_envp);
 		input = readline(prompt);
 		free(prompt);
 		if (!input)

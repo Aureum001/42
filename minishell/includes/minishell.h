@@ -98,12 +98,13 @@ void			free_split(char **arr);
 char			*remove_quotes(char *str);
 char			**copy_env(char **envp);
 void 			remove_env_var(t_cmd *cmd, char *name);
+char			*get_env_value(char **envp, char *name);
 
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);
 void			child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2]);
 void			manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd);
-char			*generate_prompt(void);
+char			*generate_prompt(char **envp);
 char			*expand_and_remove_quotes(char *value, char **envp);
 char			*expand_variables(char *str, char **envp);
 
