@@ -12,8 +12,7 @@ static int	process_line(char *input, char ***envp_ptr)
 	status = 0;
 	if (cmd_list && is_builtin(cmd_list) && !cmd_list->next)
 	{
-		status = execute_builtin(cmd_list);
-		*envp_ptr = cmd_list->envp;
+		status = execute_builtin_with_redirections(cmd_list, envp_ptr);
 	}
 	else if (cmd_list)
 	{

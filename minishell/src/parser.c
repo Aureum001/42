@@ -63,7 +63,7 @@ static t_cmd	*parse_single_command(t_token **tokens, char **envp)
 	{
 		if ((*tokens)->type == TOKEN_WORD)
 		{
-			tmp = remove_quotes((*tokens)->value);
+			tmp = expand_and_remove_quotes((*tokens)->value, envp);
 			cmd->argv[i++] = tmp;
 		}
 		else if ((*tokens)->type >= TOKEN_REDIRECT_IN

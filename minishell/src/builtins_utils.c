@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <fcntl.h>
 
 int	is_builtin(t_cmd *cmd)
 {

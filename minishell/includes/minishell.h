@@ -47,6 +47,13 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct s_var_info
+{
+	char	*name;
+	char	*start;
+	char	*end;
+}	t_var_info;
+
 // --- Function Prototypes ---
 
 // Lexer
@@ -74,6 +81,9 @@ int				execute_env(t_cmd *cmd);
 // Builtin Dispatcher
 int				is_builtin(t_cmd *cmd);
 int				execute_builtin(t_cmd *cmd);
+// Redirections
+void			restore_builtin_redirections(int saved_stdin, int saved_stdout);
+int				execute_builtin_with_redirections(t_cmd *cmd, char ***envp_ptr);
 void			print_all_env_vars(char **envp);
 int				export_single_var(t_cmd *cmd, char *arg);
 int				find_env_index(char **env, char *name);
@@ -94,5 +104,7 @@ void			execute_command(t_cmd *cmd, char **envp);
 void			child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2]);
 void			manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd);
 char			*generate_prompt(void);
+char			*expand_and_remove_quotes(char *value, char **envp);
+char			*expand_variables(char *str, char **envp);
 
 #endif
