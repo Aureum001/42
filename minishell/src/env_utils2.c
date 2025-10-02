@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:47:55 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:54:42 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	add_entries(t_cmd *cmd, char *new_entry)
@@ -27,12 +39,12 @@ void	add_entries(t_cmd *cmd, char *new_entry)
 	cmd->envp = new_env;
 }
 
-static void update_env_var(t_cmd *cmd, char *name, char *value)
+static void	update_env_var(t_cmd *cmd, char *name, char *value)
 {
-	int index;
-	char *new_entry;
-	int name_len;
-	int value_len;
+	int		index;
+	char	*new_entry;
+	int		name_len;
+	int		value_len;
 
 	index = find_env_index(cmd->envp, name);
 	name_len = ft_strlen(name);
@@ -54,9 +66,9 @@ static void update_env_var(t_cmd *cmd, char *name, char *value)
 
 int	export_single_var(t_cmd *cmd, char *arg)
 {
-	char *equal_pos;
-	char *name;
-	char *value;
+	char	*equal_pos;
+	char	*name;
+	char	*value;
 
 	equal_pos = ft_strchr(arg, '=');
 	if (equal_pos)
@@ -79,17 +91,19 @@ int	export_single_var(t_cmd *cmd, char *arg)
 	return (0);
 }
 
-static char **create_new_env_array(char **old_env, int index_to_remove)
+static char	**create_new_env_array(char **old_env, int index_to_remove)
 {
-	int count;
-	char **new_env;
-	int i;
-	int j;
+	int		count;
+	char	**new_env;
+	int		i;
+	int		j;
 
 	count = 0;
-	while (old_env[count]) count++;
+	while (old_env[count])
+		count++;
 	new_env = malloc(sizeof(char *) * count);
-	if (!new_env) return (NULL);
+	if (!new_env)
+		return (NULL);
 	j = 0;
 	i = 0;
 	while (i < count)
@@ -103,11 +117,10 @@ static char **create_new_env_array(char **old_env, int index_to_remove)
 			free(old_env[i]);
 		i++;
 	}
-	new_env[j] = NULL;
-	return (new_env);
+	return (new_env[j] = NULL, new_env);
 }
 
-void remove_env_var(t_cmd *cmd, char *name)
+void	remove_env_var(t_cmd *cmd, char *name)
 {
 	int		index;
 	char	**new_env;
@@ -117,7 +130,7 @@ void remove_env_var(t_cmd *cmd, char *name)
 		return ;
 	new_env = create_new_env_array(cmd->envp, index);
 	if (!new_env)
-		return;
+		return ;
 	free(cmd->envp);
 	cmd->envp = new_env;
 }

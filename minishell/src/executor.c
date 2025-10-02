@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:11 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:48:12 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "libft.h"
 #include <fcntl.h>
@@ -41,7 +53,7 @@ int	executor(t_cmd *cmd_list)
 		if (pid < 0)
 		{
 			perror("fork");
-			break;
+			break ;
 		}
 		manage_parent_fds(&in_fd, pipefd, current_cmd);
 		current_cmd = current_cmd->next;

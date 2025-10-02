@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_word.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:14 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 11:08:46 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int word_token_unclosed_quote(const char *line, int i)
+static int	word_token_unclosed_quote(const char *line, int i)
 {
-	int j;
+	int	j;
 
 	j = i + 1;
 	while (line[j] && !(ft_isspace(line[j]) || ft_strchr("|<>", line[j])))
@@ -10,12 +22,21 @@ static int word_token_unclosed_quote(const char *line, int i)
 	return (j);
 }
 
-t_token *get_word_token(char **line_ptr)
+static int	handle_quote(char *line, int i)
 {
-	char *line;
-	char *start;
-	int i;
-	int qidx;
+	int	qidx;
+
+	qidx = find_closing_quote(line + i, line[i]);
+	if (qidx == -1)
+		return (word_token_unclosed_quote(line, i));
+	return (i + qidx + 1);
+}
+
+t_token	*get_word_token(char **line_ptr)
+{
+	char	*line;
+	char	*start;
+	int		i;
 
 	line = *line_ptr;
 	start = line;
@@ -24,24 +45,18 @@ t_token *get_word_token(char **line_ptr)
 	{
 		if (line[i] == '\'' || line[i] == '"')
 		{
-			qidx = find_closing_quote(line + i, line[i]);
-			if (qidx == -1)
-			{
-				i = word_token_unclosed_quote(line, i);
-				break;
-			}
-			i += qidx + 1;
-			continue;
+			i = handle_quote(line, i);
+			continue ;
 		}
 		if (ft_isspace(line[i]) || ft_strchr("|<>", line[i]))
-			break;
+			break ;
 		i++;
 	}
 	*line_ptr += i;
 	return (new_token(ft_substr(start, 0, i), TOKEN_WORD));
 }
 
-static void lexer_add_token(t_token **head, t_token **current, t_token *new_tok)
+static void	lexer_add_token(t_token **head, t_token **current, t_token *new_tok)
 {
 	if (!*head)
 	{
@@ -55,11 +70,11 @@ static void lexer_add_token(t_token **head, t_token **current, t_token *new_tok)
 	}
 }
 
-t_token *lexer(char *line)
+t_token	*lexer(char *line)
 {
-	t_token *head;
-	t_token *current;
-	t_token *new_tok;
+	t_token	*head;
+	t_token	*current;
+	t_token	*new_tok;
 
 	head = NULL;
 	current = NULL;

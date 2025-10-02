@@ -8,6 +8,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <ctype.h>
+# include <signal.h>
 # include "libft.h"
 
 // --- Tokenizer Structures ---
@@ -47,12 +48,9 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_var_info
-{
-	char	*name;
-	char	*start;
-	char	*end;
-}	t_var_info;
+// --- Signal Handling ---
+void	setup_interactive_signals(void);
+void	setup_exec_signals(void);
 
 // --- Function Prototypes ---
 
@@ -81,9 +79,6 @@ int				execute_env(t_cmd *cmd);
 // Builtin Dispatcher
 int				is_builtin(t_cmd *cmd);
 int				execute_builtin(t_cmd *cmd);
-// Redirections
-void			restore_builtin_redirections(int saved_stdin, int saved_stdout);
-int				execute_builtin_with_redirections(t_cmd *cmd, char ***envp_ptr);
 void			print_all_env_vars(char **envp);
 int				export_single_var(t_cmd *cmd, char *arg);
 int				find_env_index(char **env, char *name);
@@ -98,14 +93,11 @@ void			free_split(char **arr);
 char			*remove_quotes(char *str);
 char			**copy_env(char **envp);
 void 			remove_env_var(t_cmd *cmd, char *name);
-char			*get_env_value(char **envp, char *name);
 
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);
 void			child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2]);
 void			manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd);
-char			*generate_prompt(char **envp);
-char			*expand_and_remove_quotes(char *value, char **envp);
-char			*expand_variables(char *str, char **envp);
+char			*generate_prompt(void);
 
 #endif

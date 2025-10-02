@@ -1,1 +1,0 @@
-echo 'hello'"world" ancanale's'" shell

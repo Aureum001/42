@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:47:31 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:52:31 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 int	execute_cd(t_cmd *cmd)
 {
@@ -15,7 +24,7 @@ int	execute_cd(t_cmd *cmd)
 	path = cmd->argv[1];
 	if (!path)
 	{
-		path = get_env_value(cmd->envp, "HOME");
+		path = getenv("HOME");
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
@@ -54,9 +63,9 @@ int	execute_echo(t_cmd *cmd)
 	return (0);
 }
 
-int execute_pwd()
+int	execute_pwd(void)
 {
-	char cwd[1024];
+	char	cwd[1024];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
@@ -68,7 +77,7 @@ int execute_pwd()
 	return (0);
 }
 
-int execute_export(t_cmd *cmd)
+int	execute_export(t_cmd *cmd)
 {
 	int	i;
 
@@ -87,45 +96,17 @@ int execute_export(t_cmd *cmd)
 	return (0);
 }
 
-int execute_unset(t_cmd *cmd)
+int	execute_unset(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
-	if (!cmd->argv[1]) return (0);
+	if (!cmd->argv[1])
+		return (0);
 	i = 1;
 	while (cmd->argv[i])
 	{
 		remove_env_var(cmd, cmd->argv[i]);
 		i++;
 	}
-	return (0);
-}
-
-int execute_exit(t_cmd *cmd)
-{
-	int status;
-
-	status = 0;
-	if (cmd->argv[1])
-	{
-		if (cmd->argv[2])
-		{
-			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-			return (1);
-		}
-		status = ft_atoi(cmd->argv[1]);
-	}
-	ft_putstr_fd("exit\n", 1);
-	exit(status);
-}
-
-int execute_env(t_cmd *cmd)
-{
-	if (cmd->argv[1])
-	{
-		ft_putstr_fd("minishell: env: too many arguments\n", 2);
-		return (1);
-	}
-	print_all_env_vars(cmd->envp);
 	return (0);
 }

@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 10:50:26 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:50:27 by ancanale         ###   ########.fr       */
+/*   Created: 2025/10/02 10:51:18 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 11:00:57 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_type type, char *value)
+int	execute_exit(t_cmd *cmd)
 {
-	t_token	*token;
+	int	status;
 
-	token = (t_token *)malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = type;
-	token->value = value;
-	token->next = NULL;
-	return (token);
+	status = 0;
+	if (cmd->argv[1])
+	{
+		if (cmd->argv[2])
+		{
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+			return (1);
+		}
+		status = ft_atoi(cmd->argv[1]);
+	}
+	ft_putstr_fd("exit\n", 1);
+	exit(status);
 }
 
-void	free_tokens(t_token *tokens)
+int	execute_env(t_cmd *cmd)
 {
-	t_token	*tmp;
-
-	while (tokens)
+	if (cmd->argv[1])
 	{
-		tmp = tokens;
-		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
+		ft_putstr_fd("minishell: env: too many arguments\n", 2);
+		return (1);
 	}
+	print_all_env_vars(cmd->envp);
+	return (0);
 }

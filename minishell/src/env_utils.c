@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:47:50 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:47:51 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void print_all_env_vars(char **envp)
+void	print_all_env_vars(char **envp)
 {
 	if (!envp)
 		return ;
@@ -55,20 +67,4 @@ char	**copy_env(char **envp)
 	}
 	new_env[count] = NULL;
 	return (new_env);
-}
-
-char	*get_env_value(char **envp, char *name)
-{
-	int		index;
-	char	*value;
-
-	if (!envp || !name)
-		return (NULL);
-	
-	index = find_env_index(envp, name);
-	if (index == -1)
-		return (NULL);
-	
-	value = envp[index] + ft_strlen(name) + 1;
-	return (value);
 }

@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:47:36 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:53:47 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-#include <fcntl.h>
 
 int	is_builtin(t_cmd *cmd)
 {
@@ -19,8 +30,6 @@ int	is_builtin(t_cmd *cmd)
 		return (1);
 	if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
 		return (1);
-	// Add other builtins here with "||"
-	// e.g., || ft_strcmp(cmd->argv[0], "echo") == 0
 	return (0);
 }
 
@@ -40,6 +49,5 @@ int	execute_builtin(t_cmd *cmd)
 		return (execute_exit(cmd));
 	if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
 		return (execute_env(cmd));
-	// Add other builtins here with "else if"
-	return (1); // Should not happen if is_builtin is correct
+	return (1);
 }

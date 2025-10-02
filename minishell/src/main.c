@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:21 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:48:22 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+volatile sig_atomic_t	g_executing = 0;
 
 static int	process_line(char *input, char ***envp_ptr)
 {
@@ -12,11 +26,16 @@ static int	process_line(char *input, char ***envp_ptr)
 	status = 0;
 	if (cmd_list && is_builtin(cmd_list) && !cmd_list->next)
 	{
-		status = execute_builtin_with_redirections(cmd_list, envp_ptr);
+		status = execute_builtin(cmd_list);
+		*envp_ptr = cmd_list->envp;
 	}
 	else if (cmd_list)
 	{
+		g_executing = 1;
+		setup_exec_signals();
 		status = executor(cmd_list);
+		g_executing = 0;
+		setup_interactive_signals();
 	}
 	free_tokens(tokens);
 	free_cmd_list(cmd_list);
@@ -34,9 +53,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	shell_envp = copy_env(envp);
 	last_status = 0;
+	setup_interactive_signals();
 	while (1)
 	{
-		prompt = generate_prompt(shell_envp);
+		prompt = generate_prompt();
 		input = readline(prompt);
 		free(prompt);
 		if (!input)
@@ -48,6 +68,5 @@ int	main(int argc, char **argv, char **envp)
 			last_status = process_line(input, &shell_envp);
 		free(input);
 	}
-	free_split(shell_envp);
-	return (last_status);
+	return (free_split(shell_envp), last_status);
 }

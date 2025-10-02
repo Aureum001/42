@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 11:00:32 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static t_cmd	*new_cmd(void)
@@ -63,7 +75,7 @@ static t_cmd	*parse_single_command(t_token **tokens, char **envp)
 	{
 		if ((*tokens)->type == TOKEN_WORD)
 		{
-			tmp = expand_and_remove_quotes((*tokens)->value, envp);
+			tmp = remove_quotes((*tokens)->value);
 			cmd->argv[i++] = tmp;
 		}
 		else if ((*tokens)->type >= TOKEN_REDIRECT_IN
@@ -74,8 +86,7 @@ static t_cmd	*parse_single_command(t_token **tokens, char **envp)
 		}
 		*tokens = (*tokens)->next;
 	}
-	cmd->envp = envp;
-	return (cmd);
+	return (cmd->envp = envp, cmd);
 }
 
 t_cmd	*parser(t_token *tokens, char **envp)

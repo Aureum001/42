@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:18 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 11:02:56 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_token_type get_metachar_type(char c, char next)
+t_token_type	get_metachar_type(char c, char next)
 {
 	if (c == '|')
 		return (TOKEN_PIPE);
@@ -15,9 +27,10 @@ t_token_type get_metachar_type(char c, char next)
 	return (TOKEN_WORD);
 }
 
-int find_closing_quote(const char *str, char quote)
+int	find_closing_quote(const char *str, char quote)
 {
-	int i;
+	int	i;
+
 	i = 1;
 	while (str[i])
 	{
@@ -28,17 +41,18 @@ int find_closing_quote(const char *str, char quote)
 	return (-1);
 }
 
-t_token *get_metachar_token(char **line_ptr)
+t_token	*get_metachar_token(char **line_ptr)
 {
-	char *line;
-	t_token_type type;
-	int len;
-	char *value;
+	char			*line;
+	t_token_type	type;
+	int				len;
+	char			*value;
 
 	line = *line_ptr;
 	type = get_metachar_type(line[0], line[1]);
 	len = 1;
-	if ((line[0] == '<' && line[1] == '<') || (line[0] == '>' && line[1] == '>'))
+	if ((line[0] == '<' && line[1] == '<')
+		|| (line[0] == '>' && line[1] == '>'))
 		len = 2;
 	value = ft_substr(line, 0, len);
 	*line_ptr += len;

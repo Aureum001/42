@@ -1,39 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 10:50:26 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:50:27 by ancanale         ###   ########.fr       */
+/*   Created: 2025/10/02 10:17:45 by frasanch          #+#    #+#             */
+/*   Updated: 2025/10/02 10:48:50 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*new_token(t_token_type type, char *value)
+static void	sigint_handler(int sig)
 {
-	t_token	*token;
-
-	token = (t_token *)malloc(sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = type;
-	token->value = value;
-	token->next = NULL;
-	return (token);
+	(void)sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-void	free_tokens(t_token *tokens)
+static void	sigint_exec_handler(int sig)
 {
-	t_token	*tmp;
+	(void)sig;
+	write(1, "\n", 1);
+}
 
-	while (tokens)
-	{
-		tmp = tokens;
-		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
-	}
+void	setup_interactive_signals(void)
+{
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	setup_exec_signals(void)
+{
+	signal(SIGINT, sigint_exec_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

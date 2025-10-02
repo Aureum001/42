@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 10:48:04 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 10:57:46 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*join_path(const char *dir, const char *cmd)
@@ -56,8 +68,7 @@ char	*find_cmd_path(char *cmd, char **envp)
 		}
 		free(full_path);
 	}
-	free_split(paths);
-	return (NULL);
+	return (free_split(paths), NULL);
 }
 
 void	manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd)
@@ -69,35 +80,4 @@ void	manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd)
 		close(pipefd[1]);
 		*in_fd = pipefd[0];
 	}
-}
-
-void	child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2])
-{
-	int	out_fd;
-	int	status;
-
-	out_fd = STDOUT_FILENO;
-	if (cmd->next)
-	{
-		close(pipefd[0]);
-		out_fd = pipefd[1];
-	}
-	handle_redirections(cmd, &in_fd, &out_fd);
-	if (in_fd != STDIN_FILENO)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
-	if (out_fd != STDOUT_FILENO)
-	{
-		dup2(out_fd, STDOUT_FILENO);
-		close(out_fd);
-	}
-	if (is_builtin(cmd))
-	{
-		status = execute_builtin(cmd);
-		exit(status);
-	}
-	else
-		execute_command(cmd, envp);
 }
