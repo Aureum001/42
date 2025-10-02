@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/02 11:29:46 by ancanale         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -49,8 +61,8 @@ typedef struct s_cmd
 }	t_cmd;
 
 // --- Signal Handling ---
-void	setup_interactive_signals(void);
-void	setup_exec_signals(void);
+void			setup_interactive_signals(void);
+void			setup_exec_signals(void);
 
 // --- Function Prototypes ---
 
@@ -70,7 +82,7 @@ int				executor(t_cmd *cmd_list);
 char			*find_cmd_path(char *cmd, char **envp);
 int				execute_cd(t_cmd *cmd);
 int				execute_echo(t_cmd *cmd);
-int				execute_pwd();
+int				execute_pwd(void);
 int				execute_export(t_cmd *cmd);
 int				execute_unset(t_cmd *cmd);
 int				execute_exit(t_cmd *cmd);
@@ -92,12 +104,14 @@ const char		*token_type_to_string(t_token_type type);
 void			free_split(char **arr);
 char			*remove_quotes(char *str);
 char			**copy_env(char **envp);
-void 			remove_env_var(t_cmd *cmd, char *name);
+void			remove_env_var(t_cmd *cmd, char *name);
 
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);
-void			child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2]);
-void			manage_parent_fds(int *in_fd, int pipefd[2], t_cmd *current_cmd);
+void			child_process(t_cmd *cmd, char **envp,
+					int in_fd, int pipefd[2]);
+void			manage_parent_fds(int *in_fd, int pipefd[2],
+					t_cmd *current_cmd);
 char			*generate_prompt(void);
 
 #endif
