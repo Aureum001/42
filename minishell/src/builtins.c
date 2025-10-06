@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:31 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:52:31 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 09:54:17 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 int	execute_cd(t_cmd *cmd)
 {
 	char	*path;
+	char	*cwd; 
 
 	if (cmd->argv[1] && cmd->argv[2])
-	{
-		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
-		return (1);
-	}
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
 	path = cmd->argv[1];
 	if (!path)
 	{
-		path = getenv("HOME");
+		path = get_env_value(cmd->envp, "HOME");
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
@@ -32,10 +30,13 @@ int	execute_cd(t_cmd *cmd)
 		}
 	}
 	if (chdir(path) != 0)
-	{
+		return (perror("minishell: cd"), 1);
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
 		perror("minishell: cd");
-		return (1);
-	}
+	else
+		free(cwd);
+	update_pwd_after_cd(cmd);
 	return (0);
 }
 
@@ -63,18 +64,29 @@ int	execute_echo(t_cmd *cmd)
 	return (0);
 }
 
-int	execute_pwd(void)
+int	execute_pwd(t_cmd *cmd)
 {
 	char	cwd[1024];
+	char	*pwd_env;
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
-		perror("minishell: pwd");
-		return (1);
+		ft_putstr_fd(cwd, 1);
+		ft_putstr_fd("\n", 1);
+		return (0);
 	}
-	ft_putstr_fd(cwd, 1);
-	ft_putstr_fd("\n", 1);
-	return (0);
+	if (cmd && cmd->envp)
+	{
+		pwd_env = get_env_value(cmd->envp, "PWD");
+		if (pwd_env)
+		{
+			ft_putstr_fd(pwd_env, 1);
+			ft_putstr_fd("\n", 1);
+			return (0);
+		}
+	}
+	perror("minishell: pwd");
+	return (1);
 }
 
 int	execute_export(t_cmd *cmd)

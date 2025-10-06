@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 09:26:49 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 10:01:05 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,14 @@ int				find_closing_quote(const char *str, char quote);
 // Parser
 t_cmd			*parser(t_token *tokens, char **envp);
 void			free_cmd_list(t_cmd *cmd_list);
+t_cmd			*new_cmd(void);
 
 // Executor
 int				executor(t_cmd *cmd_list);
 char			*find_cmd_path(char *cmd, char **envp);
 int				execute_cd(t_cmd *cmd);
 int				execute_echo(t_cmd *cmd);
-int				execute_pwd(void);
+int				execute_pwd(t_cmd *cmd);
 int				execute_export(t_cmd *cmd);
 int				execute_unset(t_cmd *cmd);
 int				execute_exit(t_cmd *cmd);
@@ -105,7 +106,8 @@ void			free_split(char **arr);
 char			*remove_quotes(char *str);
 char			**copy_env(char **envp);
 void			remove_env_var(t_cmd *cmd, char *name);
-
+char			*get_env_value(char **envp, char *name);
+void			update_pwd_after_cd(t_cmd *cmd);
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);
 void			child_process(t_cmd *cmd, char **envp,

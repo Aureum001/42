@@ -6,13 +6,13 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:00:32 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 10:00:45 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_cmd	*new_cmd(void)
+t_cmd	*new_cmd(void)
 {
 	t_cmd	*cmd;
 
