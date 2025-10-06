@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:50 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:47:51 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 09:50:07 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ void	print_all_env_vars(char **envp)
 		return ;
 	while (*envp)
 	{
-		ft_putstr_fd(*envp, 1);
-		ft_putstr_fd("\n", 1);
+		if (ft_strchr(*envp, '='))
+		{
+			ft_putstr_fd(*envp, 1);
+			ft_putstr_fd("\n", 1);
+		}
 		envp++;
 	}
 }

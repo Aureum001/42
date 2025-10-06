@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:55 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:54:42 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 09:48:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	export_single_var(t_cmd *cmd, char *arg)
 	char	*equal_pos;
 	char	*name;
 	char	*value;
+	char	*declared_entry;
 
 	equal_pos = ft_strchr(arg, '=');
 	if (equal_pos)
@@ -82,10 +83,9 @@ int	export_single_var(t_cmd *cmd, char *arg)
 	{
 		if (find_env_index(cmd->envp, arg) == -1)
 		{
-			ft_putstr_fd("minishell: export: ", 2);
-			ft_putstr_fd(arg, 2);
-			ft_putstr_fd(": not found\n", 2);
-			return (1);
+			declared_entry = ft_strdup(arg);
+			if (declared_entry)
+				add_entries(cmd, declared_entry);
 		}
 	}
 	return (0);
