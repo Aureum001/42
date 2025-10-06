@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:29:46 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 09:25:14 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int				executor(t_cmd *cmd_list);
 char			*find_cmd_path(char *cmd, char **envp);
 int				execute_cd(t_cmd *cmd);
 int				execute_echo(t_cmd *cmd);
-int				execute_pwd(void);
+int				execute_pwd(t_cmd *cmd);
 int				execute_export(t_cmd *cmd);
 int				execute_unset(t_cmd *cmd);
 int				execute_exit(t_cmd *cmd);
