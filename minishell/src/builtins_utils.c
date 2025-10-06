@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:36 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:53:47 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 09:27:21 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	execute_builtin(t_cmd *cmd)
 	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0)
 		return (execute_echo(cmd));
 	if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0)
-		return (execute_pwd(cmd));
+		return (execute_pwd());
 	if (ft_strncmp(cmd->argv[0], "export", 6) == 0)
 		return (execute_export(cmd));
 	if (ft_strncmp(cmd->argv[0], "unset", 5) == 0)
