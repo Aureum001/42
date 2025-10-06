@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:31 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 09:54:17 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 10:04:00 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	execute_cd(t_cmd *cmd)
 {
 	char	*path;
-	char	*cwd; 
+	char	*cwd;
 
 	if (cmd->argv[1] && cmd->argv[2])
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
