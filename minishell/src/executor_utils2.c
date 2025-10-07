@@ -6,13 +6,13 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:08 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 10:08:15 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 10:19:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	child_process_aux(t_cmd *cmd, char **envp)
+static void	child_process_aux(t_cmd *cmd)
 {
 	int	status;
 
@@ -24,10 +24,10 @@ static void	child_process_aux(t_cmd *cmd, char **envp)
 		exit(status);
 	}
 	else
-		execute_command(cmd, envp);
+		execute_command(cmd, cmd->envp);
 }
 
-void	child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2])
+void	child_process(t_cmd *cmd, int in_fd, int pipefd[2])
 {
 	int	out_fd;
 
@@ -48,5 +48,5 @@ void	child_process(t_cmd *cmd, char **envp, int in_fd, int pipefd[2])
 		dup2(out_fd, STDOUT_FILENO);
 		close(out_fd);
 	}
-	child_process_aux(cmd, envp);
+	child_process_aux(cmd);
 }

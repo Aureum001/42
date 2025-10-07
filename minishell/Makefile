@@ -17,6 +17,9 @@ LIBS		= -lreadline
 COMMON_SRCS = lexer.c \
 			  lexer_word.c \
 			  parser.c \
+			  parser2.c \
+			  parser_utils.c \
+			  parser_utils2.c \
 			  executor.c \
 			  executor_utils.c \
 			  executor_utils2.c \
@@ -30,7 +33,10 @@ COMMON_SRCS = lexer.c \
 			  builtins_utils.c \
 			  env_utils.c \
 			  env_utils2.c \
-			  signals.c
+			  signals.c \
+			  quote_utils.c \
+			  process.c \
+			  input.c
 
 # Main executable specific source
 MAIN_SRC_FILE = main.c

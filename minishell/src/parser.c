@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 10:00:45 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 10:53:20 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_cmd	*new_cmd(void)
 	return (cmd);
 }
 
-static void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
+void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
 {
 	t_redir	*redir;
 	t_redir	*current;
@@ -43,7 +43,7 @@ static void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
 	}
 }
 
-static int	count_args(t_token *tokens)
+int	count_args(t_token *tokens)
 {
 	int	i;
 
@@ -60,52 +60,27 @@ static int	count_args(t_token *tokens)
 	return (i);
 }
 
-static t_cmd	*parse_single_command(t_token **tokens, char **envp)
+static void	process_pipeline(t_token **tokens, t_cmd **current,
+			char **envp, int last_status)
 {
-	t_cmd	*cmd;
-	int		argc;
-	int		i;
-	char	*tmp;
-
-	cmd = new_cmd();
-	argc = count_args(*tokens);
-	cmd->argv = ft_calloc(argc + 1, sizeof(char *));
-	i = 0;
-	while (*tokens && (*tokens)->type != TOKEN_PIPE)
+	if ((*tokens)->type == TOKEN_PIPE)
 	{
-		if ((*tokens)->type == TOKEN_WORD)
-		{
-			tmp = remove_quotes((*tokens)->value);
-			cmd->argv[i++] = tmp;
-		}
-		else if ((*tokens)->type >= TOKEN_REDIRECT_IN
-			&& (*tokens)->type <= TOKEN_HEREDOC)
-		{
-			add_redir(cmd, *tokens, (*tokens)->next);
-			*tokens = (*tokens)->next;
-		}
 		*tokens = (*tokens)->next;
+		(*current)->next = parse_single_command(tokens, envp, last_status);
+		*current = (*current)->next;
 	}
-	return (cmd->envp = envp, cmd);
 }
 
-t_cmd	*parser(t_token *tokens, char **envp)
+t_cmd	*parser(t_token *tokens, char **envp, int last_status)
 {
 	t_cmd	*head;
 	t_cmd	*current;
 
 	if (!tokens)
 		return (NULL);
-	head = parse_single_command(&tokens, envp);
+	head = parse_single_command(&tokens, envp, last_status);
 	current = head;
 	while (tokens)
-	{
-		if (tokens->type == TOKEN_PIPE)
-		{
-			tokens = tokens->next;
-			current->next = parse_single_command(&tokens, envp);
-			current = current->next;
-		}
-	}
+		process_pipeline(&tokens, &current, envp, last_status);
 	return (head);
 }

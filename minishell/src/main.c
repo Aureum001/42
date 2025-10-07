@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:21 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:48:22 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 10:39:16 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,46 @@
 
 volatile sig_atomic_t	g_executing = 0;
 
-static int	process_line(char *input, char ***envp_ptr)
+static char	*get_input_line(void)
 {
-	t_token	*tokens;
-	t_cmd	*cmd_list;
-	int		status;
+	char	*prompt;
+	char	*input;
 
-	add_history(input);
-	tokens = lexer(input);
-	cmd_list = parser(tokens, *envp_ptr);
-	status = 0;
-	if (cmd_list && is_builtin(cmd_list) && !cmd_list->next)
+	prompt = generate_prompt();
+	input = readline(prompt);
+	free(prompt);
+	return (input);
+}
+
+static int	process_input(char *input, char ***shell_envp, int last_status)
+{
+	char	*complete_input;
+
+	complete_input = read_multiline_input(input);
+	if (complete_input && *complete_input)
+		last_status = process_line(complete_input, shell_envp, last_status);
+	free(complete_input);
+	return (last_status);
+}
+
+static void	run_shell_loop(char ***shell_envp, int *last_status)
+{
+	char	*input;
+
+	while (1)
 	{
-		status = execute_builtin(cmd_list);
-		*envp_ptr = cmd_list->envp;
+		input = get_input_line();
+		if (!input)
+		{
+			printf("exit\n");
+			break ;
+		}
+		*last_status = process_input(input, shell_envp, *last_status);
 	}
-	else if (cmd_list)
-	{
-		g_executing = 1;
-		setup_exec_signals();
-		status = executor(cmd_list);
-		g_executing = 0;
-		setup_interactive_signals();
-	}
-	free_tokens(tokens);
-	free_cmd_list(cmd_list);
-	return (status);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	char	*prompt;
 	int		last_status;
 	char	**shell_envp;
 
@@ -54,19 +62,8 @@ int	main(int argc, char **argv, char **envp)
 	shell_envp = copy_env(envp);
 	last_status = 0;
 	setup_interactive_signals();
-	while (1)
-	{
-		prompt = generate_prompt();
-		input = readline(prompt);
-		free(prompt);
-		if (!input)
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (*input)
-			last_status = process_line(input, &shell_envp);
-		free(input);
-	}
-	return (free_split(shell_envp), last_status);
+	run_shell_loop(&shell_envp, &last_status);
+	rl_clear_history();
+	free_split(shell_envp);
+	return (last_status);
 }

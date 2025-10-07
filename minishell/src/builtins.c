@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:31 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 10:04:00 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 12:02:03 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,9 @@ int	execute_cd(t_cmd *cmd)
 
 	if (cmd->argv[1] && cmd->argv[2])
 		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
-	path = cmd->argv[1];
+	path = get_cd_path(cmd);
 	if (!path)
-	{
-		path = get_env_value(cmd->envp, "HOME");
-		if (!path)
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			return (1);
-		}
-	}
+		return (1);
 	if (chdir(path) != 0)
 		return (perror("minishell: cd"), 1);
 	cwd = getcwd(NULL, 0);

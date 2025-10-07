@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:36 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 10:08:43 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/06 12:02:56 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,31 @@ void	update_pwd_after_cd(t_cmd *cmd)
 	export_cmd = new_cmd();
 	update_pwd(cmd, export_cmd, new_pwd_var);
 	free(new_pwd_var);
+}
+
+char	*get_cd_path(t_cmd *cmd)
+{
+	char	*path;
+
+	path = cmd->argv[1];
+	if (!path || ft_strncmp(path, "~", 1) == 0)
+	{
+		path = get_env_value(cmd->envp, "HOME");
+		if (!path)
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+			return (NULL);
+		}
+	}
+	else if (ft_strncmp(path, "-", 1) == 0)
+	{
+		path = get_env_value(cmd->envp, "OLDPWD");
+		if (!path)
+		{
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+			return (NULL);
+		}
+		ft_putendl_fd(path, 1);
+	}
+	return (path);
 }

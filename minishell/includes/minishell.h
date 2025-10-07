@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 10:01:05 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 10:54:09 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,22 @@ typedef struct s_cmd
 	char			**argv;
 	char			**envp;
 	t_redir			*redirs;
+	int				last_status;
 	struct s_cmd	*next;
 }	t_cmd;
+
+typedef struct s_var_info
+{
+	char	*name;
+	char	*start;
+	char	*end;
+}	t_var_info;
+
+typedef struct s_parse_ctx
+{
+	char	**envp;
+	int		last_status;
+}	t_parse_ctx;
 
 // --- Signal Handling ---
 void			setup_interactive_signals(void);
@@ -74,9 +88,22 @@ t_token			*get_word_token(char **line_ptr);
 int				find_closing_quote(const char *str, char quote);
 
 // Parser
-t_cmd			*parser(t_token *tokens, char **envp);
+t_cmd			*parser(t_token *tokens, char **envp, int last_status);
 void			free_cmd_list(t_cmd *cmd_list);
 t_cmd			*new_cmd(void);
+t_cmd			*parse_single_command(t_token **tkns, char **envp, int st);
+void			add_redir(t_cmd *cmd, t_token *redir, t_token *file);
+int				count_args(t_token *tokens);
+void			parse_command_token(t_cmd *cmd, t_token **tkns,
+					int *i, t_parse_ctx *ctx);
+char			*process_variable(char **result, char **search_pos,
+					char **envp, int last_status);
+void			find_var_end(t_var_info *info);
+char			*build_replaced_string(char *before, char *val, char *after);
+char			*perform_string_replacement(char **result_ptr,
+					t_var_info *info, char *value);
+char			*replace_and_rebuild(char **result_ptr, t_var_info *info,
+					char **envp, int last_status);
 
 // Executor
 int				executor(t_cmd *cmd_list);
@@ -110,10 +137,19 @@ char			*get_env_value(char **envp, char *name);
 void			update_pwd_after_cd(t_cmd *cmd);
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);
-void			child_process(t_cmd *cmd, char **envp,
-					int in_fd, int pipefd[2]);
+void			child_process(t_cmd *cmd, int in_fd, int pipefd[2]);
 void			manage_parent_fds(int *in_fd, int pipefd[2],
 					t_cmd *current_cmd);
 char			*generate_prompt(void);
+char			*expand_and_remove_quotes(char *value, char **envp,
+					int last_status);
+char			*expand_variables(char *str, char **envp, int last_status);
+int				has_unclosed_quote(const char *line);
+char			*join_with_newline(char *s1, char *s2);
+int				process_line(char *input, char ***envp_ptr, int last_status);
+char			*read_multiline_input(char *initial_input);
+
+// Builtin Utils
+char			*get_cd_path(t_cmd *cmd);
 
 #endif

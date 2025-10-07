@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:11 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 10:48:12 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 10:19:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	executor(t_cmd *cmd_list)
 			pipe(pipefd);
 		pid = fork();
 		if (pid == 0)
-			child_process(current_cmd, current_cmd->envp, in_fd, pipefd);
+			child_process(current_cmd, in_fd, pipefd);
 		if (pid < 0)
 		{
 			perror("fork");
