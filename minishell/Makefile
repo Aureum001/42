@@ -33,6 +33,7 @@ COMMON_SRCS = lexer.c \
 			  builtins_utils.c \
 			  env_utils.c \
 			  env_utils2.c \
+			  env_utils3.c \
 			  signals.c \
 			  quote_utils.c \
 			  process.c \

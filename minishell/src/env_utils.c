@@ -6,26 +6,11 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:50 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 09:56:08 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 12:11:40 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_all_env_vars(char **envp)
-{
-	if (!envp)
-		return ;
-	while (*envp)
-	{
-		if (ft_strchr(*envp, '='))
-		{
-			ft_putstr_fd(*envp, 1);
-			ft_putstr_fd("\n", 1);
-		}
-		envp++;
-	}
-}
 
 int	find_env_index(char **env, char *name)
 {
@@ -38,7 +23,8 @@ int	find_env_index(char **env, char *name)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], name, len) == 0
+			&& (env[i][len] == '=' || env[i][len] == '\0'))
 			return (i);
 		i++;
 	}
@@ -86,4 +72,22 @@ char	*get_env_value(char **envp, char *name)
 	if (!equal_pos)
 		return (NULL);
 	return (equal_pos + 1);
+}
+
+void	print_env_vars(char **envp)
+{
+	int	i;
+
+	if (!envp)
+		return ;
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strchr(envp[i], '='))
+		{
+			ft_putstr_fd(envp[i], 1);
+			ft_putstr_fd("\n", 1);
+		}
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:51:18 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:00:57 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 11:50:27 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ int	execute_env(t_cmd *cmd)
 		ft_putstr_fd("minishell: env: too many arguments\n", 2);
 		return (1);
 	}
-	print_all_env_vars(cmd->envp);
+	print_env_vars(cmd->envp);
 	return (0);
 }

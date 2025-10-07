@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 10:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:34:52 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 11:41:56 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,7 @@ static int	execute_builtin_if_simple(t_cmd *cmd, char ***envp_ptr)
 	int		status;
 
 	status = execute_builtin(cmd);
-	if (cmd->envp != *envp_ptr)
-	{
-		free_split(*envp_ptr);
-		*envp_ptr = cmd->envp;
-	}
+	*envp_ptr = cmd->envp;
 	return (status);
 }
 

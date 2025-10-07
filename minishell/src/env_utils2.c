@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:55 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 09:48:54 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 11:39:11 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,12 @@ int	export_single_var(t_cmd *cmd, char *arg)
 	equal_pos = ft_strchr(arg, '=');
 	if (equal_pos)
 	{
-		*equal_pos = '\0';
-		name = arg;
+		name = ft_substr(arg, 0, equal_pos - arg);
+		if (!name)
+			return (1);
 		value = equal_pos + 1;
 		update_env_var(cmd, name, value);
+		free(name);
 	}
 	else
 	{

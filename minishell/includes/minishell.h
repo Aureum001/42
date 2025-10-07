@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:54:09 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/07 11:50:27 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ int				execute_env(t_cmd *cmd);
 int				is_builtin(t_cmd *cmd);
 int				execute_builtin(t_cmd *cmd);
 void			print_all_env_vars(char **envp);
+void			print_env_vars(char **envp);
 int				export_single_var(t_cmd *cmd, char *arg);
 int				find_env_index(char **env, char *name);
 
