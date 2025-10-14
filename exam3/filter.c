@@ -12,7 +12,7 @@ typedef struct s_filter_ctx
 	char buffer[4096 + 256];
 	size_t buffer_size;
 	size_t remaining;
-} t_filter_ctx;
+}	t_filter_ctx;
 
 void init_filter_ctx(t_filter_ctx *ctx, const char *pat)
 {
