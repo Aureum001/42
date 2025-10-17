@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:53:20 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:01:52 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
 		return ;
 	redir->type = redir_token->type;
 	redir->filename = ft_strdup(file_token->value);
+	redir->heredoc_fd = -1;
 	if (!cmd->redirs)
 		cmd->redirs = redir;
 	else

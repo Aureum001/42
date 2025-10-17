@@ -24,6 +24,7 @@ COMMON_SRCS = lexer.c \
 			  executor_utils.c \
 			  executor_utils2.c \
 			  executor_helpers.c \
+			  heredoc.c \
 			  utils.c \
 			  char_utils.c \
 			  debug.c \
@@ -42,9 +43,6 @@ COMMON_SRCS = lexer.c \
 # Main executable specific source
 MAIN_SRC_FILE = main.c
 
-# Test specific source
-TEST_SRC_FILE = test_lexer.c
-
 # --- Object Files ---
 # Note: No addprefix is used here. Paths are constructed directly.
 COMMON_OBJS	= $(patsubst %.c, $(OBJ_DIR)/%.o, $(COMMON_SRCS))
@@ -59,14 +57,6 @@ $(NAME): $(MAIN_OBJ) $(COMMON_OBJS)
 	@make -C $(LIBFT_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -o $(NAME) $(MAIN_OBJ) $(COMMON_OBJS) -L$(LIBFT_DIR) -lft $(LIBS)
 	@echo "minishell compiled!"
-
-# Test executable
-test: $(TEST_NAME)
-
-$(TEST_NAME): $(TEST_OBJ) $(COMMON_OBJS)
-	@make -C $(LIBFT_DIR)
-	@$(CC) $(CFLAGS) $(INCLUDES) -o $(TEST_NAME) $(TEST_OBJ) $(COMMON_OBJS) -L$(LIBFT_DIR) -lft $(LIBS)
-	@echo "$(TEST_NAME) compiled!"
 
 # Generic rule to compile any .c from src to an .o in obj
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -86,4 +76,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re

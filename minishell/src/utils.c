@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:50:30 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:45:11 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:05:55 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	free_cmd_list(t_cmd *cmd_list)
 		{
 			tmp_redir = cmd_list->redirs->next;
 			free(cmd_list->redirs->filename);
+			if (cmd_list->redirs->heredoc_fd >= 0)
+				close(cmd_list->redirs->heredoc_fd);
 			free(cmd_list->redirs);
 			cmd_list->redirs = tmp_redir;
 		}

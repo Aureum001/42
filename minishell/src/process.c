@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 10:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 11:41:56 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:03:00 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	process_line(char *input, char ***envp_ptr, int last_status)
 	add_history(input);
 	tokens = lexer(input);
 	cmd_list = parser(tokens, *envp_ptr, last_status);
+	if (cmd_list)
+		process_all_heredocs(cmd_list);
 	status = 0;
 	if (cmd_list && is_builtin(cmd_list)
 		&& !cmd_list->next && !cmd_list->redirs)

@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 11:50:27 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:02:17 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_redir
 {
 	t_token_type	type;
 	char			*filename;
+	int				heredoc_fd;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -149,6 +150,7 @@ int				has_unclosed_quote(const char *line);
 char			*join_with_newline(char *s1, char *s2);
 int				process_line(char *input, char ***envp_ptr, int last_status);
 char			*read_multiline_input(char *initial_input);
+void			process_all_heredocs(t_cmd *cmd_list);
 
 // Builtin Utils
 char			*get_cd_path(t_cmd *cmd);

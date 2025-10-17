@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:36 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/06 12:02:56 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:38:47 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,24 @@
 
 int	is_builtin(t_cmd *cmd)
 {
+	char	*cmd_name;
+
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return (0);
-	if (ft_strncmp(cmd->argv[0], "cd", 2) == 0)
+	cmd_name = cmd->argv[0];
+	if (ft_strncmp(cmd_name, "cd", 3) == 0 && cmd_name[2] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0)
+	if (ft_strncmp(cmd_name, "echo", 5) == 0 && cmd_name[4] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0)
+	if (ft_strncmp(cmd_name, "pwd", 4) == 0 && cmd_name[3] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "export", 6) == 0)
+	if (ft_strncmp(cmd_name, "export", 7) == 0 && cmd_name[6] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "unset", 5) == 0)
+	if (ft_strncmp(cmd_name, "unset", 6) == 0 && cmd_name[5] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "exit", 4) == 0)
+	if (ft_strncmp(cmd_name, "exit", 5) == 0 && cmd_name[4] == '\0')
 		return (1);
-	if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
+	if (ft_strncmp(cmd_name, "env", 4) == 0 && cmd_name[3] == '\0')
 		return (1);
 	return (0);
 }
