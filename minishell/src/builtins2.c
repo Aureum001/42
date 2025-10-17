@@ -6,11 +6,29 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:51:18 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 11:50:27 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:32:31 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	is_valid_number(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	execute_exit(t_cmd *cmd)
 {
@@ -19,6 +37,14 @@ int	execute_exit(t_cmd *cmd)
 	status = 0;
 	if (cmd->argv[1])
 	{
+		if (!is_valid_number(cmd->argv[1]))
+		{
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(cmd->argv[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			ft_putstr_fd("exit\n", 1);
+			exit(2);
+		}
 		if (cmd->argv[2])
 		{
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
