@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 10:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 11:55:46 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:02:10 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ char	*read_multiline_input(char *initial_input)
 {
 	char	*tmp;
 
-	while (has_unclosed_quote(initial_input)
-		|| has_trailing_pipe(initial_input))
+	while ((has_unclosed_quote(initial_input)
+			|| has_trailing_pipe(initial_input))
+		&& !has_leading_pipe(initial_input))
 	{
 		tmp = handle_continuation_line(initial_input);
 		if (!tmp)

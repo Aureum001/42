@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 10:00:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 11:54:02 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:02:00 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,18 @@ int	has_unclosed_quote(const char *line)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	has_leading_pipe(const char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] && ft_isspace(line[i]))
+		i++;
+	if (line[i] == '|')
+		return (1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 11:54:57 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:01:26 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ t_cmd	*parser(t_token *tokens, char **envp, int last_status)
 
 	if (!tokens)
 		return (NULL);
+	if (tokens->type == TOKEN_PIPE)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n",
+			2);
+		return (NULL);
+	}
 	head = parse_single_command(&tokens, envp, last_status);
 	current = head;
 	while (tokens)
