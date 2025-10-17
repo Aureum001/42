@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 11:49:58 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:54:57 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	process_pipeline(t_token **tokens, t_cmd **current,
 	if ((*tokens)->type == TOKEN_PIPE)
 	{
 		*tokens = (*tokens)->next;
-		if (!*tokens || (*tokens)->type == TOKEN_PIPE)
+		if (*tokens && (*tokens)->type == TOKEN_PIPE)
 		{
 			ft_putstr_fd("minishell: syntax error near unexpected token `|'\n",
 				2);
