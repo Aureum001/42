@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 10:01:52 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:49:58 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,22 @@ int	count_args(t_token *tokens)
 	return (i);
 }
 
-static void	process_pipeline(t_token **tokens, t_cmd **current,
+static int	process_pipeline(t_token **tokens, t_cmd **current,
 			char **envp, int last_status)
 {
 	if ((*tokens)->type == TOKEN_PIPE)
 	{
 		*tokens = (*tokens)->next;
+		if (!*tokens || (*tokens)->type == TOKEN_PIPE)
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `|'\n",
+				2);
+			return (0);
+		}
 		(*current)->next = parse_single_command(tokens, envp, last_status);
 		*current = (*current)->next;
 	}
+	return (1);
 }
 
 t_cmd	*parser(t_token *tokens, char **envp, int last_status)
@@ -82,6 +89,12 @@ t_cmd	*parser(t_token *tokens, char **envp, int last_status)
 	head = parse_single_command(&tokens, envp, last_status);
 	current = head;
 	while (tokens)
-		process_pipeline(&tokens, &current, envp, last_status);
+	{
+		if (!process_pipeline(&tokens, &current, envp, last_status))
+		{
+			free_cmd_list(head);
+			return (NULL);
+		}
+	}
 	return (head);
 }
