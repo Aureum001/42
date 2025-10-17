@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 10:02:17 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 10:50:57 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,9 @@ char			*remove_quotes(char *str);
 char			**copy_env(char **envp);
 void			remove_env_var(t_cmd *cmd, char *name);
 char			*get_env_value(char **envp, char *name);
+void			add_entries(t_cmd *cmd, char *new_entry);
+void			update_env_var(t_cmd *cmd, char *name, char *value);
+int				is_valid_identifier(char *name);
 void			update_pwd_after_cd(t_cmd *cmd);
 void			handle_redirections(t_cmd *cmd, int *in_fd, int *out_fd);
 void			execute_command(t_cmd *cmd, char **envp);

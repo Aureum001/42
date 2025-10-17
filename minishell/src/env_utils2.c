@@ -6,16 +6,39 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:47:55 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 11:39:11 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:09:05 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	find_insert_position(char **envp, char *new_entry)
+{
+	int		i;
+	char	*eq_pos;
+	int		key_len;
+
+	eq_pos = ft_strchr(new_entry, '=');
+	if (!eq_pos)
+		key_len = ft_strlen(new_entry);
+	else
+		key_len = eq_pos - new_entry;
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], new_entry, key_len) > 0
+			&& (envp[i][key_len] == '=' || envp[i][key_len] == '\0'))
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
 void	add_entries(t_cmd *cmd, char *new_entry)
 {
 	char	**new_env;
 	int		count;
+	int		pos;
 	int		i;
 
 	count = 0;
@@ -23,23 +46,23 @@ void	add_entries(t_cmd *cmd, char *new_entry)
 		count++;
 	new_env = malloc(sizeof(char *) * (count + 2));
 	if (!new_env)
-	{
-		free(new_entry);
-		return ;
-	}
-	i = 0;
+		return ((void)(free(new_entry)));
+	pos = find_insert_position(cmd->envp, new_entry);
+	i = -1;
+	while (++i < pos)
+		new_env[i] = cmd->envp[i];
+	new_env[pos] = new_entry;
 	while (i < count)
 	{
-		new_env[i] = cmd->envp[i];
+		new_env[i + 1] = cmd->envp[i];
 		i++;
 	}
-	new_env[count] = new_entry;
 	new_env[count + 1] = NULL;
 	free(cmd->envp);
 	cmd->envp = new_env;
 }
 
-static void	update_env_var(t_cmd *cmd, char *name, char *value)
+void	update_env_var(t_cmd *cmd, char *name, char *value)
 {
 	int		index;
 	char	*new_entry;
@@ -62,35 +85,6 @@ static void	update_env_var(t_cmd *cmd, char *name, char *value)
 	}
 	else
 		add_entries(cmd, new_entry);
-}
-
-int	export_single_var(t_cmd *cmd, char *arg)
-{
-	char	*equal_pos;
-	char	*name;
-	char	*value;
-	char	*declared_entry;
-
-	equal_pos = ft_strchr(arg, '=');
-	if (equal_pos)
-	{
-		name = ft_substr(arg, 0, equal_pos - arg);
-		if (!name)
-			return (1);
-		value = equal_pos + 1;
-		update_env_var(cmd, name, value);
-		free(name);
-	}
-	else
-	{
-		if (find_env_index(cmd->envp, arg) == -1)
-		{
-			declared_entry = ft_strdup(arg);
-			if (declared_entry)
-				add_entries(cmd, declared_entry);
-		}
-	}
-	return (0);
 }
 
 static char	**create_new_env_array(char **old_env, int index_to_remove)
