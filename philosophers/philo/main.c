@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:24:37 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:44:44 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 09:30:40 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,11 @@ int	main(int argc, char **argv)
 			argv[0]);
 		return (1);
 	}
-	init_data(&data, argc, argv);
+	if (init_data(&data, argc, argv) != 0)
+	{
+		printf("Error: Failed to initialize data\n");
+		return (1);
+	}
 	init_philos(&data);
 	args = malloc(sizeof(t_arg) * data.num_philos);
 	create_threads(&data, args, &monitor_thread);

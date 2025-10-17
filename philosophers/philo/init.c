@@ -6,16 +6,55 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:24:40 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:38:52 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 09:34:02 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philosophers.h"
 
-void	init_data(t_data *data, int argc, char **argv)
+static void	destroy_mutexes(t_data *data, int forks_count, int has_print,
+		int has_all_ate)
 {
 	int	i;
 
+	i = forks_count - 1;
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i--;
+	}
+	if (has_all_ate)
+		pthread_mutex_destroy(&data->all_ate_mutex);
+	if (has_print)
+		pthread_mutex_destroy(&data->print_mutex);
+}
+
+static int	init_mutexes(t_data *data)
+{
+	int	i;
+
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->all_ate_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&data->print_mutex);
+		return (1);
+	}
+	i = 0;
+	while (i < data->num_philos)
+	{
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		{
+			destroy_mutexes(data, i, 1, 1);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	init_data(t_data *data, int argc, char **argv)
+{
 	data->num_philos = ft_atoi(argv[1]);
 	data->time_to_die = ft_atoi(argv[2]);
 	data->time_to_eat = ft_atoi(argv[3]);
@@ -29,14 +68,9 @@ void	init_data(t_data *data, int argc, char **argv)
 	data->all_ate = 0;
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philos);
 	data->philos = malloc(sizeof(t_philo) * data->num_philos);
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->all_ate_mutex, NULL);
-	i = 0;
-	while (i < data->num_philos)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
+	if (!data->forks || !data->philos)
+		return (1);
+	return (init_mutexes(data));
 }
 
 void	init_philos(t_data *data)

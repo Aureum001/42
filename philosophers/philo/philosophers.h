@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:24:29 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:32:43 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 09:29:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_arg
 }	t_arg;
 
 int			ft_atoi(const char *str);
-void		init_data(t_data *data, int argc, char **argv);
+int			init_data(t_data *data, int argc, char **argv);
 void		init_philos(t_data *data);
 int			check_death(t_data *data);
 void		*philosopher_routine(void *arg);
