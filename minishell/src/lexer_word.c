@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:14 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:08:46 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:43:22 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	word_token_unclosed_quote(const char *line, int i)
 	int	j;
 
 	j = i + 1;
-	while (line[j] && !(ft_isspace(line[j]) || ft_strchr("|<>", line[j])))
+	while (line[j] && !(ft_isspace(line[j]) || ft_strchr("|<>&", line[j])))
 		j++;
 	return (j);
 }
@@ -48,7 +48,7 @@ t_token	*get_word_token(char **line_ptr)
 			i = handle_quote(line, i);
 			continue ;
 		}
-		if (ft_isspace(line[i]) || ft_strchr("|<>", line[i]))
+		if (ft_isspace(line[i]) || ft_strchr("|<>&", line[i]))
 			break ;
 		i++;
 	}
@@ -85,8 +85,12 @@ t_token	*lexer(char *line)
 			line++;
 			continue ;
 		}
-		if (ft_strchr("|<>", *line))
+		if (ft_strchr("|<>&", *line))
+		{
 			new_tok = get_metachar_token(&line);
+			if (!new_tok)
+				return (NULL);
+		}
 		else
 			new_tok = get_word_token(&line);
 		lexer_add_token(&head, &current, new_tok);

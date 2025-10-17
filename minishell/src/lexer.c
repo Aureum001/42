@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:18 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/02 11:02:56 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 11:41:23 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 
 t_token_type	get_metachar_type(char c, char next)
 {
+	if (c == '|' && next == '|')
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `||'\n", 2);
+		return (TOKEN_EOF);
+	}
+	if (c == '&' && next == '&')
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `&&'\n", 2);
+		return (TOKEN_EOF);
+	}
 	if (c == '|')
 		return (TOKEN_PIPE);
 	if (c == '<' && next == '<')
@@ -50,6 +60,8 @@ t_token	*get_metachar_token(char **line_ptr)
 
 	line = *line_ptr;
 	type = get_metachar_type(line[0], line[1]);
+	if (type == TOKEN_EOF)
+		return (NULL);
 	len = 1;
 	if ((line[0] == '<' && line[1] == '<')
 		|| (line[0] == '>' && line[1] == '>'))
