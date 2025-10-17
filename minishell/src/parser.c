@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 12:01:26 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:30:22 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
 	t_redir	*redir;
 	t_redir	*current;
 
+	if (!file_token)
+		return ;
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
 		return ;
@@ -55,7 +57,11 @@ int	count_args(t_token *tokens)
 			i++;
 		else if (tokens->type >= TOKEN_REDIRECT_IN
 			&& tokens->type <= TOKEN_HEREDOC)
+		{
 			tokens = tokens->next;
+			if (!tokens)
+				return (i);
+		}
 		tokens = tokens->next;
 	}
 	return (i);

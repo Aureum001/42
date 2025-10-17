@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:00:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:53:20 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/17 12:31:16 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ t_cmd	*parse_single_command(t_token **tokens, char **envp, int last_status)
 	while (*tokens && (*tokens)->type != TOKEN_PIPE)
 	{
 		parse_command_token(cmd, tokens, &i, &ctx);
-		*tokens = (*tokens)->next;
+		if (*tokens)
+			*tokens = (*tokens)->next;
 	}
 	cmd->envp = envp;
 	return (cmd);
