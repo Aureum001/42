@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:01 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 10:02:41 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 09:51:25 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,12 @@ void	execute_command(t_cmd *cmd, char **envp)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		if (cmd->argv[0][0] == '/' || (cmd->argv[0][0] == '.'
+			&& cmd->argv[0][1] == '/') || (cmd->argv[0][0] == '.'
+			&& cmd->argv[0][1] == '.' && cmd->argv[0][2] == '/'))
+			ft_putstr_fd(": No such file or directory\n", 2);
+		else
+			ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
 	execve(path, cmd->argv, envp);
