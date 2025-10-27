@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 12:29:00 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 09:38:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,10 @@ char			*join_with_newline(char *s1, char *s2);
 int				process_line(char *input, char ***envp_ptr, int last_status);
 char			*read_multiline_input(char *initial_input);
 void			process_all_heredocs(t_cmd *cmd_list);
+
+// Global State
+void			set_executing(int value);
+int				get_executing(void);
 
 // Builtin Utils
 char			*get_cd_path(t_cmd *cmd);

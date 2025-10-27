@@ -6,13 +6,11 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:21 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:39:16 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 09:38:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-volatile sig_atomic_t	g_executing = 0;
 
 static char	*get_input_line(void)
 {

@@ -6,13 +6,11 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 10:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 10:03:00 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 09:38:54 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern volatile sig_atomic_t	g_executing;
 
 static int	execute_builtin_if_simple(t_cmd *cmd, char ***envp_ptr)
 {
@@ -27,10 +25,10 @@ static int	execute_pipeline(t_cmd *cmd_list)
 {
 	int		status;
 
-	g_executing = 1;
+	set_executing(1);
 	setup_exec_signals();
 	status = executor(cmd_list);
-	g_executing = 0;
+	set_executing(0);
 	setup_interactive_signals();
 	return (status);
 }

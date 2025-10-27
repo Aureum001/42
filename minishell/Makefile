@@ -39,7 +39,8 @@ COMMON_SRCS = lexer.c \
 			  signals.c \
 			  quote_utils.c \
 			  process.c \
-			  input.c
+			  input.c \
+			  global_state.c
 
 # Main executable specific source
 MAIN_SRC_FILE = main.c
