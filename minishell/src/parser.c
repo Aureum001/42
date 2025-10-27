@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 12:30:22 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:00:01 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ static int	process_pipeline(t_token **tokens, t_cmd **current,
 			return (0);
 		}
 		(*current)->next = parse_single_command(tokens, envp, last_status);
+		if (!(*current)->next)
+			return (0);
 		*current = (*current)->next;
 	}
 	return (1);
@@ -99,6 +101,8 @@ t_cmd	*parser(t_token *tokens, char **envp, int last_status)
 		return (NULL);
 	}
 	head = parse_single_command(&tokens, envp, last_status);
+	if (!head)
+		return (NULL);
 	current = head;
 	while (tokens)
 	{

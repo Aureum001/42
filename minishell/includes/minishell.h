@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/27 09:38:54 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:00:03 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_cmd			*new_cmd(void);
 t_cmd			*parse_single_command(t_token **tkns, char **envp, int st);
 void			add_redir(t_cmd *cmd, t_token *redir, t_token *file);
 int				count_args(t_token *tokens);
-void			parse_command_token(t_cmd *cmd, t_token **tkns,
+int				parse_command_token(t_cmd *cmd, t_token **tkns,
 					int *i, t_parse_ctx *ctx);
 char			*process_variable(char **result, char **search_pos,
 					char **envp, int last_status);
