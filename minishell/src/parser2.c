@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 11:00:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/27 10:00:36 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:10:23 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ static int	process_redir_token(t_cmd *cmd, t_token **tokens)
 		if (!(*tokens)->next)
 			ft_putstr_fd("`newline'\n", 2);
 		else
-			ft_putstr_fd("`newline'\n", 2);
+		{
+			ft_putstr_fd("`", 2);
+			ft_putstr_fd((*tokens)->next->value, 2);
+			ft_putstr_fd("'\n", 2);
+		}
 		return (0);
 	}
 	add_redir(cmd, *tokens, (*tokens)->next);
