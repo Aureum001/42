@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:24 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/27 10:00:01 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/29 12:27:24 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,6 @@ t_cmd	*new_cmd(void)
 	if (!cmd)
 		return (NULL);
 	return (cmd);
-}
-
-void	add_redir(t_cmd *cmd, t_token *redir_token, t_token *file_token)
-{
-	t_redir	*redir;
-	t_redir	*current;
-
-	if (!file_token)
-		return ;
-	redir = ft_calloc(1, sizeof(t_redir));
-	if (!redir)
-		return ;
-	redir->type = redir_token->type;
-	redir->filename = ft_strdup(file_token->value);
-	redir->heredoc_fd = -1;
-	if (!cmd->redirs)
-		cmd->redirs = redir;
-	else
-	{
-		current = cmd->redirs;
-		while (current->next)
-			current = current->next;
-		current->next = redir;
-	}
 }
 
 int	count_args(t_token *tokens)

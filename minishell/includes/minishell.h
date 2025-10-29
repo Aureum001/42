@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 11:27:52 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/27 10:00:03 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/29 12:27:24 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/history.h>
 # include <ctype.h>
 # include <signal.h>
+# include <sys/ioctl.h>
 # include "libft.h"
 
 // --- Tokenizer Structures ---
@@ -50,6 +51,7 @@ typedef struct s_redir
 	t_token_type	type;
 	char			*filename;
 	int				heredoc_fd;
+	int				quoted_heredoc;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -156,10 +158,19 @@ char			*join_with_newline(char *s1, char *s2);
 int				process_line(char *input, char ***envp_ptr, int last_status);
 char			*read_multiline_input(char *initial_input);
 void			process_all_heredocs(t_cmd *cmd_list);
+void			write_heredoc_line(int pipe_fd, char *line, t_cmd *cmd,
+					int quoted);
+int				check_heredoc_delimiter(char *line, const char *delim);
 
 // Global State
+void			set_status_bit(int bit_position, int value);
+int				get_status_bit(int bit_position);
 void			set_executing(int value);
 int				get_executing(void);
+void			set_heredoc_interrupted(int value);
+int				get_heredoc_interrupted(void);
+void			set_in_heredoc(int value);
+int				get_in_heredoc(void);
 
 // Builtin Utils
 char			*get_cd_path(t_cmd *cmd);

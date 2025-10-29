@@ -6,41 +6,50 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 10:00:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/17 10:02:08 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/29 12:27:24 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	process_here_doc_input(int pipe_write_fd, const char *delimiter,
-				t_cmd *cmd)
+static int	process_heredoc_line(int pipe_fd, const char *delim,
+				t_cmd *cmd, int quoted)
 {
 	char	*line;
-	char	*expanded_line;
-	size_t	line_len;
 
-	while (1)
+	line = get_next_line(STDIN_FILENO);
+	if (!line || get_heredoc_interrupted())
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-		if (!line)
-			break ;
-		line_len = ft_strlen(line);
-		if (line_len > 0 && line[line_len - 1] == '\n')
-			line[line_len - 1] = '\0';
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
-		{
+		if (line)
 			free(line);
-			break ;
-		}
-		expanded_line = expand_variables(line, cmd->envp, cmd->last_status);
-		ft_putendl_fd(expanded_line, pipe_write_fd);
-		free(line);
-		free(expanded_line);
+		return (0);
 	}
+	if (check_heredoc_delimiter(line, delim))
+	{
+		free(line);
+		return (0);
+	}
+	write_heredoc_line(pipe_fd, line, cmd, quoted);
+	free(line);
+	return (1);
 }
 
-static int	setup_heredoc_pipe(const char *delimiter, t_cmd *cmd)
+static void	process_here_doc_input(int pipe_write_fd, const char *delimiter,
+				t_cmd *cmd, int quoted)
+{
+	set_in_heredoc(1);
+	while (1)
+	{
+		if (get_heredoc_interrupted())
+			break ;
+		write(STDOUT_FILENO, "> ", 2);
+		if (!process_heredoc_line(pipe_write_fd, delimiter, cmd, quoted))
+			break ;
+	}
+	set_in_heredoc(0);
+}
+
+static int	setup_heredoc_pipe(const char *delimiter, t_cmd *cmd, int quoted)
 {
 	int		pipefd[2];
 
@@ -49,8 +58,13 @@ static int	setup_heredoc_pipe(const char *delimiter, t_cmd *cmd)
 		perror("minishell: heredoc pipe");
 		return (-1);
 	}
-	process_here_doc_input(pipefd[1], delimiter, cmd);
+	process_here_doc_input(pipefd[1], delimiter, cmd, quoted);
 	close(pipefd[1]);
+	if (get_heredoc_interrupted())
+	{
+		close(pipefd[0]);
+		return (-1);
+	}
 	return (pipefd[0]);
 }
 
@@ -63,7 +77,8 @@ static void	process_cmd_heredocs(t_cmd *cmd)
 	{
 		if (redir->type == TOKEN_HEREDOC)
 		{
-			redir->heredoc_fd = setup_heredoc_pipe(redir->filename, cmd);
+			redir->heredoc_fd = setup_heredoc_pipe(redir->filename,
+					cmd, redir->quoted_heredoc);
 			if (redir->heredoc_fd < 0)
 				return ;
 		}

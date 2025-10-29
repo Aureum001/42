@@ -25,6 +25,7 @@ COMMON_SRCS = lexer.c \
 			  executor_utils2.c \
 			  executor_helpers.c \
 			  heredoc.c \
+			  heredoc_utils.c \
 			  utils.c \
 			  char_utils.c \
 			  debug.c \
@@ -40,7 +41,9 @@ COMMON_SRCS = lexer.c \
 			  quote_utils.c \
 			  process.c \
 			  input.c \
-			  global_state.c
+			  parser_redir.c \
+			  global_state.c \
+			  state_heredoc.c
 
 # Main executable specific source
 MAIN_SRC_FILE = main.c

@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   global_state.c                                     :+:      :+:    :+:   */
+/*   state_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/17 12:30:00 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/29 10:37:38 by ancanale         ###   ########.fr       */
+/*   Created: 2025/10/29 10:45:00 by ancanale          #+#    #+#             */
+/*   Updated: 2025/10/29 10:37:48 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t	g_signal_status = 0;
-
-void	set_status_bit(int bit_position, int value)
+void	set_heredoc_interrupted(int value)
 {
 	if (value)
-		g_signal_status |= (1 << bit_position);
+		set_status_bit(1, 1);
 	else
-		g_signal_status &= ~(1 << bit_position);
+		set_status_bit(1, 0);
 }
 
-int	get_status_bit(int bit_position)
+int	get_heredoc_interrupted(void)
 {
-	return ((g_signal_status & (1 << bit_position)) != 0);
+	return (get_status_bit(1));
 }
 
-void	set_executing(int value)
+void	set_in_heredoc(int value)
 {
-	set_status_bit(0, value);
+	if (value)
+		set_status_bit(2, 1);
+	else
+		set_status_bit(2, 0);
 }
 
-int	get_executing(void)
+int	get_in_heredoc(void)
 {
-	return (get_status_bit(0));
+	return (get_status_bit(2));
 }

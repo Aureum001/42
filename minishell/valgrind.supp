@@ -1,0 +1,20 @@
+{
+   readline_still_reachable
+   Memcheck:Leak
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   ncurses_still_reachable
+   Memcheck:Leak
+   ...
+   obj:*/libtinfo.so*
+}
+
+{
+   readline_history
+   Memcheck:Leak
+   ...
+   fun:add_history
+}
