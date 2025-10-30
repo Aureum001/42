@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:11 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/07 10:19:54 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/10/30 09:34:34 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static int	wait_for_children(pid_t last_pid)
 	{
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			exit_status = 128 + WTERMSIG(status);
 	}
 	while (wait(NULL) > 0)
 		;
