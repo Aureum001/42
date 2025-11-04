@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:01 by ancanale          #+#    #+#             */
-/*   Updated: 2025/10/27 09:51:25 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:13:19 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	execute_command(t_cmd *cmd, char **envp)
 {
 	char	*path;
 
+	if (!cmd->argv || !cmd->argv[0])
+		exit(0);
 	path = find_cmd_path(cmd->argv[0], envp);
 	if (!path)
 	{
