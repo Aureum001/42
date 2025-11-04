@@ -6,7 +6,7 @@
 /*   By: ancanale <ancanale@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 10:48:04 by ancanale          #+#    #+#             */
-/*   Updated: 2025/11/04 11:12:57 by ancanale         ###   ########.fr       */
+/*   Updated: 2025/11/04 11:20:00 by ancanale         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,7 @@ char	*find_cmd_path(char *cmd, char **envp)
 	{
 		full_path = join_path(paths[i], cmd);
 		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return (full_path);
-		}
+			return (free_split(paths), full_path);
 		free(full_path);
 	}
 	return (free_split(paths), NULL);
