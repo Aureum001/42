@@ -1,84 +1,81 @@
+#include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
-// Step 1: Count minimum removals needed for balance
-void count_removals(const char *s, int *rem_open, int *rem_close)
+int	calculate_min_removals(char *str)
 {
-	int open = 0;
-	*rem_open = 0;
-	*rem_close = 0;
-	int i = 0;
-	while (s[i])
+	int	open;
+	int	close;
+	int	i;
+
+	open = 0;
+	close = 0;
+	i = 0;
+	while (str[i])
 	{
-		if (s[i] == '(')
+		if (str[i] == '(')
 			open++;
-		else if (s[i] == ')')
+		else if (str[i] == ')')
 		{
 			if (open > 0)
 				open--;
 			else
-				(*rem_close)++;
+				close++;
 		}
 		i++;
 	}
-	*rem_open = open;
+	return (open + close);
 }
 
-// Step 2: Backtracking to generate all solutions
-void solve(const char *s, int i, int open, int rem_open, int rem_close,
-	char *out, int out_pos)
+void	generate_solutions(char *str, int min_removals, int index, int removals)
 {
-	if (s[i] == '\0')
+	char	saved;
+	int		i;
+
+	if (removals > min_removals)
+		return ;
+	if (removals == min_removals && calculate_min_removals(str) == 0)
 	{
-		if (open == 0 && rem_open == 0 && rem_close == 0)
-		{
-			out[out_pos] = '\0';
-			puts(out);
-		}
-		return;
+		puts(str);
+		return ;
 	}
-	if (s[i] == '(')
+	i = index;
+	while (str[i])
 	{
-		// Option 1: Remove this '('
-		if (rem_open > 0)
+		if (str[i] == '(' || str[i] == ')')
 		{
-			out[out_pos] = ' ';
-			solve(s, i + 1, open, rem_open - 1, rem_close, out, out_pos + 1);
+			saved = str[i];
+			str[i] = ' ';
+			generate_solutions(str, min_removals, i + 1, removals + 1);
+			str[i] = saved;
 		}
-		// Option 2: Keep this '('
-		out[out_pos] = '(';
-		solve(s, i + 1, open + 1, rem_open, rem_close, out, out_pos + 1);
-	}
-	else if (s[i] == ')')
-	{
-		// Option 1: Remove this ')'
-		if (rem_close > 0)
-		{
-			out[out_pos] = ' ';
-			solve(s, i + 1, open, rem_open, rem_close - 1, out, out_pos + 1);
-		}
-		// Option 2: Keep this ')', only if there's an unmatched '('
-		if (open > 0)
-		{
-			out[out_pos] = ')';
-			solve(s, i + 1, open - 1, rem_open, rem_close, out, out_pos + 1);
-		}
+		i++;
 	}
 }
 
-int main(int argc, char **argv)
+int	validate_input(char *str)
 {
-	if (argc != 2)
-		return 1;
-	const char *s = argv[1];
-	int rem_open, rem_close;
-	count_removals(s, &rem_open, &rem_close);
-	int len = strlen(s);
-	char *out = malloc(len + 1);
-	if (!out)
-		return 1;
-	solve(s, 0, 0, rem_open, rem_close, out, 0);
-	free(out);
-	return 0;
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '(' && str[i] != ')')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	int		min_removals;
+
+	if (argc != 2 || !argv[1][0])
+		return (1);
+	if (!validate_input(argv[1]))
+		return (1);
+	min_removals = calculate_min_removals(argv[1]);
+	generate_solutions(argv[1], min_removals, 0, 0);
+	return (0);
 }

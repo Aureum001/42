@@ -1,0 +1,151 @@
+CROSS PRODUCT METHOD - POINT IN TRIANGLE TEST
+=====================================================
+
+CONCEPT: For each edge of the triangle, check which side the point is on.
+If the point is on the SAME SIDE of all three edges, it's INSIDE.
+
+Example Triangle:
+        A (2,8)
+        /\
+       /  \
+      /    \
+     /  P1  \
+    /        \
+   /    P2    \
+  /____________\
+B (0,0)        C (10,0)
+
+
+STEP-BY-STEP VISUALIZATION:
+
+1. Edge AB (from A to B):
+   
+   Draw a vector from A to B, then from A to P
+   Cross product tells us: Is P on the LEFT or RIGHT of line AB?
+   
+        A •────────────→ (extending the line)
+        /  ↖P1 (LEFT)
+       /
+      /  P2↙ (RIGHT)
+     /
+    B •
+   
+   sign(P, A, B) = (P.x - B.x) * (A.y - B.y) - (A.x - B.x) * (P.y - B.y)
+   
+   Positive = LEFT side
+   Negative = RIGHT side
+   Zero = ON the line
+
+
+2. Edge BC (from B to C):
+   
+   B •────────────────→ C •
+        ↑P1 (LEFT/ABOVE)
+        
+        ↓P2 (RIGHT/BELOW)
+   
+   sign(P, B, C) checks position relative to BC
+
+
+3. Edge CA (from C to A):
+   
+              A •
+             ↗
+            /  P1← (LEFT)
+           /
+          /   →P2 (RIGHT)
+         /
+        C •
+   
+   sign(P, C, A) checks position relative to CA
+
+
+COMPLETE ANALYSIS:
+
+Point P1 (inside):
+  Edge AB: LEFT  (positive)
+  Edge BC: LEFT  (positive)
+  Edge CA: LEFT  (positive)
+  → All same sign = INSIDE ✓
+
+Point P2 (outside):
+  Edge AB: RIGHT (negative)
+  Edge BC: BELOW (negative)
+  Edge CA: RIGHT (positive)  ← Different sign!
+  → Mixed signs = OUTSIDE ✗
+
+
+THE ALGORITHM:
+==============
+
+float sign(Point p1, Point p2, Point p3) {
+    // Cross product of vectors (p1-p3) and (p2-p3)
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+}
+
+bool point_in_triangle(Point P, Point A, Point B, Point C) {
+    float d1 = sign(P, A, B);  // Which side of AB?
+    float d2 = sign(P, B, C);  // Which side of BC?
+    float d3 = sign(P, C, A);  // Which side of CA?
+    
+    // Check if we have both positive and negative values
+    bool has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+    bool has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+    
+    // If we have BOTH positive and negative, point is outside
+    return !(has_neg && has_pos);
+}
+
+
+NUMERIC EXAMPLE:
+================
+
+Triangle: A(2,8), B(0,0), C(10,0)
+Test Point P1(5,3):
+
+d1 = sign(P1, A, B)
+   = (5-0)*(8-0) - (2-0)*(3-0)
+   = 5*8 - 2*3
+   = 40 - 6 = 34 (POSITIVE)
+
+d2 = sign(P1, B, C)
+   = (5-10)*(0-0) - (0-10)*(3-0)
+   = -5*0 - (-10)*3
+   = 0 + 30 = 30 (POSITIVE)
+
+d3 = sign(P1, C, A)
+   = (5-2)*(0-8) - (10-2)*(3-8)
+   = 3*(-8) - 8*(-5)
+   = -24 + 40 = 16 (POSITIVE)
+
+has_neg = false (all positive)
+has_pos = true
+!(false && true) = !false = true → INSIDE ✓
+
+
+WHY IT WORKS:
+=============
+
+The cross product gives you the SIGNED AREA of a parallelogram.
+The SIGN tells you the orientation:
+
+  P on LEFT of edge  → Positive (counter-clockwise)
+  P on RIGHT of edge → Negative (clockwise)
+
+If you walk around the triangle (A→B→C→A) and the point is always
+on the same side (all left or all right), it must be inside!
+
+If the point is sometimes left, sometimes right of the edges,
+it must be outside the triangle.
+
+
+EDGE CASES:
+===========
+
+Point exactly on edge: sign = 0
+  → Depends on your definition (usually count as "inside")
+  → Modify condition to use >= 0 instead of > 0
+
+Degenerate triangle (collinear points):
+  → All signs will be 0
+  → Should be handled separately if needed

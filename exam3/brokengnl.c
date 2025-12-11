@@ -157,17 +157,19 @@ char *get_next_line(int fd)
 	char *ret = NULL;
 	char *tmp;
 	int read_ret;
-	while (1)
+	while (1) //"Hello World\n Hey"
 	{
 		tmp = ft_strchr(b, '\n');
 		if (tmp)
 			break;
-		if (!str_append_str(&ret, b))
+		if (!str_append_str(&ret, b)) //Like strjoin for ret and the buffer
 			return NULL;
-		read_ret = read(fd, b, BUFFER_SIZE);
+		read_ret = read(fd, b, BUFFER_SIZE); //read() OVERWRITES b from b[0]
+		// Iteration 1: reads "Hello" (5 bytes) -> b = "Hello\0..."
+		// Iteration 2: reads " Worl" (5 bytes) -> b = " Worl\0..." (overwrites "Hello")
 		if (read_ret == -1)
 			return NULL;
-		b[read_ret] = 0;
+		b[read_ret] = 0; //Manually add null terminator at position read_ret
 		if (read_ret == 0)
 			break;
 	}
@@ -192,6 +194,7 @@ char *get_next_line(int fd)
 	}
 	return ret;
 }
+
 
 
 

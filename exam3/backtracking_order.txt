@@ -1,0 +1,24 @@
+TSP Backtracking Order Example (n=4 cities: 0,1,2,3)
+====================================================
+
+Call Stack when exploring path 0→1→2→3:
+
+tsp_rec(depth=0)  // Try city 0 first
+├── MARK: used[0] = 1, path[0] = 0
+├── tsp_rec(depth=1)  // Try next city
+│   ├── MARK: used[1] = 1, path[1] = 1
+│   ├── tsp_rec(depth=2)  // Try next city
+│   │   ├── MARK: used[2] = 1, path[2] = 2
+│   │   ├── tsp_rec(depth=3)  // Try next city
+│   │   │   ├── MARK: used[3] = 1, path[3] = 3
+│   │   │   ├── tsp_rec(depth=4)  // BASE CASE: check path 0→1→2→3→0
+│   │   │   │   └── RETURN (no more cities to try at depth=4)
+│   │   │   └── BACKTRACK: used[3] = 0  ← First unmark (deepest)
+│   │   └── BACKTRACK: used[2] = 0  ← Second unmark
+│   └── BACKTRACK: used[1] = 0  ← Third unmark
+└── BACKTRACK: used[0] = 0  ← Fourth unmark (shallowest)
+
+Backtracking Order: 3 → 2 → 1 → 0 (reverse of path construction)
+
+After this path is fully explored, the loop in tsp_rec(depth=0) continues
+to try city 1 as the starting point, and the process repeats.
