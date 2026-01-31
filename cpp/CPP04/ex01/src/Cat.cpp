@@ -1,0 +1,31 @@
+#include "Cat.hpp"
+
+Cat::Cat() : Animal() {
+	this->type = "Cat";
+	this->CatBrain = new Brain();
+	std::cout << "Cat -> Default constructor called!\n";
+}
+
+Cat::Cat(const Cat &other) : Animal(other) {
+	std::cout << "Cat -> Copy constructor called!\n";
+	this->CatBrain = new Brain(*other.CatBrain);
+}
+
+Cat &Cat::operator=(const Cat &other) {
+	std::cout << "Cat -> Copy assigment operator called!\n";
+	if (this == &other)
+		return *this;
+	Animal::operator=(other);
+	delete this->CatBrain;
+	this->CatBrain = new Brain(*other.CatBrain);
+	return *this;
+}
+
+Cat::~Cat() {
+	delete this->CatBrain;
+	std::cout << "Cat -> Destructor called!\n";
+}
+
+void Cat::makeSound() const {
+	std::cout << "I am a Meow Meowwwww" << std::endl;
+}
