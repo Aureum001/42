@@ -1,23 +1,9 @@
-# Source Files
-SRCS = main.cpp Bureaucrat.cpp Form.cpp
+SRCS = src/main.cpp src/Bureaucrat.cpp src/Form.cpp
 
-# Source Files Prefix
-SRCS := $(addprefix src/, $(SRCS))
-# Include Folder
-INCLUDES = "./inc"
-
-# Objects Files
 OBJS = $(SRCS:.cpp=.o)
-
-# Name Of The Compiled Program
-NAME = $(shell basename $(CURDIR))
-
-# Compilation Program
+NAME = ex01
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I./inc
 CXX = c++
-# Compilation Flags
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I$(INCLUDES)
-
-# Remove Files Command
 RM = rm -f
 
 all: $(NAME)

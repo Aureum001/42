@@ -1,53 +1,82 @@
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
 
+static void printSep() {
+	std::cout << "-----------------------------" << std::endl;
+}
+
 int main() {
-	std::cout << "=== Test 1: Valid signing ===" << std::endl;
+	// 1. Valid signing
+	std::cout << "Test 1: valid signing" << std::endl;
 	try {
 		Bureaucrat alice("Alice", 50);
 		Form taxForm("Tax Form", 50, 25);
 		std::cout << taxForm << std::endl;
-		taxForm.beSigned(alice);
+		alice.signForm(taxForm);
 		std::cout << taxForm << std::endl;
 	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "Caught: " << e.what() << std::endl;
 	}
+	printSep();
 
-	std::cout << "\n=== Test 2: Grade too low to sign ===" << std::endl;
+	// 2. Grade too low to sign
+	std::cout << "Test 2: grade too low to sign" << std::endl;
 	try {
 		Bureaucrat bob("Bob", 100);
 		Form vipForm("VIP Form", 50, 25);
 		std::cout << vipForm << std::endl;
-		vipForm.beSigned(bob);
+		bob.signForm(vipForm);
+		std::cout << vipForm << std::endl;
 	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "Caught: " << e.what() << std::endl;
 	}
+	printSep();
 
-	std::cout << "\n=== Test 3: Invalid form grade (too high) ===" << std::endl;
+	// 3. Form grade too high (0)
+	std::cout << "Test 3: form grade too high (0)" << std::endl;
 	try {
-		Form invalidForm("Invalid", 0, 50);
+		Form invalid("Invalid", 0, 50);
 	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "Caught: " << e.what() << std::endl;
 	}
+	printSep();
 
-	std::cout << "\n=== Test 4: Invalid form grade (too low) ===" << std::endl;
+	// 4. Form grade too low (151)
+	std::cout << "Test 4: form grade too low (151)" << std::endl;
 	try {
-		Form invalidForm("Invalid", 50, 151);
+		Form invalid("Invalid", 50, 151);
 	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "Caught: " << e.what() << std::endl;
 	}
+	printSep();
 
-	std::cout << "\n=== Test 5: Multiple signing attempts ===" << std::endl;
+	// 5. Signing already-signed form
+	std::cout << "Test 5: double signing" << std::endl;
 	try {
 		Bureaucrat charlie("Charlie", 1);
 		Form permit("Building Permit", 10, 5);
+		charlie.signForm(permit);
 		std::cout << permit << std::endl;
-		permit.beSigned(charlie);
+		charlie.signForm(permit);
 		std::cout << permit << std::endl;
-		permit.beSigned(charlie);
 	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "Caught: " << e.what() << std::endl;
 	}
+	printSep();
+
+	// 6. Copy form
+	std::cout << "Test 6: copy form" << std::endl;
+	try {
+		Bureaucrat dave("Dave", 1);
+		Form original("Original", 5, 5);
+		dave.signForm(original);
+		Form copy(original);
+		std::cout << "Original: " << original << std::endl;
+		std::cout << "Copy:     " << copy << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Caught: " << e.what() << std::endl;
+	}
+	printSep();
 
 	return 0;
 }
