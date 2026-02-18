@@ -34,5 +34,5 @@ PresidentialPardonForm::~PresidentialPardonForm() {
 
 void PresidentialPardonForm::executer() const {
 	std::cout << "Informs that " << this->target_
-						<< " has been pardoned by Zaphod Beeblebrox." << std::endl;
+						<< " has been pardoned by ancanale." << std::endl;
 }
