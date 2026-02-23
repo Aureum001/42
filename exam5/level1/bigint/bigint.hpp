@@ -1,5 +1,4 @@
-#ifndef BIGINT_HPP
-#define BIGINT_HPP
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -17,7 +16,8 @@ public:
 	bigint();
 	bigint(unsigned int num);
 	bigint(const std::string &s); // allow string input
-	bigint(const bigint &source);
+	bigint(const bigint &copy);
+	~bigint();
 
 	std::string getStr() const;
 	bigint &operator=(const bigint &source);
@@ -52,5 +52,3 @@ public:
 };
 
 std::ostream &operator<<(std::ostream &output, const bigint &obj);
-
-#endif // BIGINT_HPP

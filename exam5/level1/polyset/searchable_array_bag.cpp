@@ -1,16 +1,11 @@
 #include "searchable_array_bag.hpp"
 
 
-searchable_array_bag::searchable_array_bag()
-{
-
-}
-
+searchable_array_bag::searchable_array_bag(){}
 searchable_array_bag::searchable_array_bag(const searchable_array_bag& source) : array_bag(source)
 {
 
 }
-
 searchable_array_bag& searchable_array_bag::operator=(const searchable_array_bag& source)
 {
 	if(this != &source)
@@ -19,6 +14,7 @@ searchable_array_bag& searchable_array_bag::operator=(const searchable_array_bag
 	}
 	return(*this);
 }
+searchable_array_bag::~searchable_array_bag(){}
 
 bool searchable_array_bag::has(int value) const
 {
@@ -30,7 +26,4 @@ bool searchable_array_bag::has(int value) const
 	return(false);
 }
 
-searchable_array_bag::~searchable_array_bag()
-{
 
-}

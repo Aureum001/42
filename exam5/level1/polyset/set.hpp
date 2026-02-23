@@ -10,6 +10,7 @@ public:
 	set(const set &source) = delete;
 	set &operator=(const set &source) = delete;
 	set(searchable_bag &s_bag);
+	~set();
 
 	bool has(int) const;
 	void insert(int);
@@ -20,6 +21,4 @@ public:
 	const searchable_bag &get_bag();
 
 	const searchable_bag &get_bag() const;
-
-	~set();
 };
