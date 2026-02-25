@@ -259,3 +259,40 @@ int bsq(FILE *fp)
 	return (0);
 }
 
+static void run_file(char *path, int multi)
+{
+	FILE *fp;
+
+	fp = fopen(path, "r");
+	if (!fp || bsq(fp) == -1)
+		fprintf(stderr, "map error\n");
+	if (fp)
+		fclose(fp);
+	if (multi)
+		fprintf(stdout, "\n");
+}
+
+int main(int argc, char *argv[])
+{
+	int i;
+
+	if (argc == 1)
+	{
+		/* No arguments: read from standard input */
+		if (bsq(stdin) == -1)
+			fprintf(stderr, "map error\n");
+	}
+	else if (argc == 2)
+	{
+		/* Single file: no trailing blank line */
+		run_file(argv[1], 0);
+	}
+	else
+	{
+		/* Multiple files: every result is followed by a blank line */
+		i = 1;
+		while (i < argc)
+			run_file(argv[i++], 1);
+	}
+	return (0);
+}
