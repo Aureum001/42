@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 class bigint
 {
@@ -17,10 +18,9 @@ public:
 	bigint(unsigned int num);
 	bigint(const std::string &s); // allow string input
 	bigint(const bigint &copy);
-	~bigint();
+	bigint &operator=(const bigint &source);
 
 	std::string getStr() const;
-	bigint &operator=(const bigint &source);
 
 	// Addition
 	bigint operator+(const bigint &other) const;
