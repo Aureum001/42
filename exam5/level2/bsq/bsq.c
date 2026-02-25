@@ -52,16 +52,13 @@ int load_map(FILE *fp, t_map *map)
 			map->cols = (int)len;
 		else if ((int)len != map->cols)
 			break;
+		for (int j = 0; j < map->cols; j++)
 		{
-			int j;
-			for (j = 0; j < map->cols; j++)
+			if (line[j] != map->empty && line[j] != map->obstacle)
 			{
-				if (line[j] != map->empty && line[j] != map->obstacle)
-				{
-					free(line);
-					free_map(map);
-					return (-1);
-				}
+				free(line);
+				free_map(map);
+				return (-1);
 			}
 		}
 		map->grid[i] = strdup(line);
