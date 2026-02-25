@@ -45,23 +45,23 @@ int load_map(FILE *fp, t_map *map)
 		len = getline(&line, &cap, fp);
 		if (len <= 0)
 			break;
-		/* Strip the newline – its absence means the line is malformed */
 		if (line[len - 1] != '\n')
 			break;
 		line[--len] = '\0';
-		/* All rows must share the same width */
 		if (i == 0)
 			map->cols = (int)len;
 		else if ((int)len != map->cols)
 			break;
-		/* Every character must be empty or obstacle */
-		for (int j = 0; j < map->cols; j++)
 		{
-			if (line[j] != map->empty && line[j] != map->obstacle)
+			int j;
+			for (j = 0; j < map->cols; j++)
 			{
-				free(line);
-				free_map(map);
-				return (-1);
+				if (line[j] != map->empty && line[j] != map->obstacle)
+				{
+					free(line);
+					free_map(map);
+					return (-1);
+				}
 			}
 		}
 		map->grid[i] = strdup(line);
@@ -80,7 +80,6 @@ int load_map(FILE *fp, t_map *map)
 
 void solve(t_map *map)
 {
-	/* Variable-length 2-D array on the stack (C99). */
 	int dp[map->rows][map->cols];
 	int best_size;
 	int best_row;
@@ -104,7 +103,6 @@ void solve(t_map *map)
 				dp[i][j] = 1;
 			else
 			{
-				/* min of the three neighbours + 1 */
 				m = dp[i - 1][j];
 				if (dp[i][j - 1] < m)
 					m = dp[i][j - 1];
@@ -112,7 +110,6 @@ void solve(t_map *map)
 					m = dp[i - 1][j - 1];
 				dp[i][j] = m + 1;
 			}
-			/* Strict >  →  keep first (topmost / leftmost) maximum */
 			if (dp[i][j] > best_size)
 			{
 				best_size = dp[i][j];
@@ -123,7 +120,6 @@ void solve(t_map *map)
 		}
 		i++;
 	}
-	/* Fill the best square directly into the grid */
 	for (i = best_row; i < best_row + best_size; i++)
 		for (j = best_col; j < best_col + best_size; j++)
 			map->grid[i][j] = map->full;
@@ -145,7 +141,6 @@ int bsq(FILE *fp)
 	size_t cap;
 
 	memset(&map, 0, sizeof(map));
-	/* Read the header line */
 	line = NULL;
 	cap = 0;
 	if (getline(&line, &cap, fp) <= 0)
@@ -159,10 +154,8 @@ int bsq(FILE *fp)
 		return (-1);
 	}
 	free(line);
-	/* Load and validate map rows */
 	if (load_map(fp, &map) == -1)
 		return (-1);
-	/* Solve and print */
 	solve(&map);
 	print_map(&map);
 	free_map(&map);
@@ -188,18 +181,15 @@ int main(int argc, char *argv[])
 
 	if (argc == 1)
 	{
-		/* No arguments: read from standard input */
 		if (bsq(stdin) == -1)
 			fprintf(stderr, "map error\n");
 	}
 	else if (argc == 2)
 	{
-		/* Single file: no trailing blank line */
 		run_file(argv[1], 0);
 	}
 	else
 	{
-		/* Multiple files: every result is followed by a blank line */
 		i = 1;
 		while (i < argc)
 			run_file(argv[i++], 1);
