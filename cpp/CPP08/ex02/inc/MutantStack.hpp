@@ -1,40 +1,32 @@
-// Created by tde-sous on 3/29/24.
-#ifndef EX02_MUTANTSTACK_HPP
-#define EX02_MUTANTSTACK_HPP
+#pragma once
 
 #include <iostream>
 #include <stack>
 #include <vector>
 
 template <typename T, typename C = std::deque<T> >
-class MutantStack : public std::stack<T, C> {
+class MutantStack : public std::stack<T, C>
+{
 public:
-  /**
-   * @brief Default constructor.
-   */
   MutantStack();
-  /**
-   * @brief Copy constructor.
-   * @param other The other MutantStack to copy.
-   */
   MutantStack(const MutantStack &other);
-  /**
-   * @brief Copy assignment operator.
-   * @param other The other MutantStack to assign.
-   * @return A reference to the assigned MutantStack.
-   */
   MutantStack &operator=(const MutantStack &other);
-  /**
-   * @brief Destructor.
-   */
   ~MutantStack();
 
+  typedef C container_type;
   typedef typename C::iterator iterator;
+  typedef typename C::const_iterator const_iterator;
+  typedef typename C::reverse_iterator reverse_iterator;
+  typedef typename C::const_reverse_iterator const_reverse_iterator;
 
   iterator begin();
   iterator end();
+  const_iterator begin() const;
+  const_iterator end() const;
+  reverse_iterator rbegin();
+  reverse_iterator rend();
+  const_reverse_iterator rbegin() const;
+  const_reverse_iterator rend() const;
 };
 
 #include "MutantStack.tpp"
-
-#endif // EX02_MUTANTSTACK_HPP
