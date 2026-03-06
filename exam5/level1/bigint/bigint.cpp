@@ -16,30 +16,6 @@ static void reverse_inplace(std::string &s)
 	}
 }
 
-bigint::bigint() : str("0") {}
-
-bigint::bigint(unsigned int n)
-{
-	str = std::to_string(n);
-}
-
-bigint::bigint(const std::string &s) : str(s)
-{
-	trim();
-	check_digits();
-}
-
-bigint::bigint(const bigint &copy) : str(copy.str) {}
-
-std::string bigint::getStr() const { return str; }
-
-bigint &bigint::operator=(const bigint &other)
-{
-	if (this != &other)
-		str = other.str;
-	return *this;
-}
-
 void bigint::trim()
 {
 	size_t p = str.find_first_not_of('0');
@@ -66,6 +42,32 @@ void bigint::check_digits()
 		}
 	}
 }
+
+bigint::bigint() : str("0") {}
+
+bigint::bigint(unsigned int n)
+{
+	std::ostringstream oss;
+	oss << n;
+	str = oss.str();
+}
+
+bigint::bigint(const std::string &s) : str(s)
+{
+	trim();
+	check_digits();
+}
+
+bigint::bigint(const bigint &copy) : str(copy.str) {}
+
+bigint &bigint::operator=(const bigint &other)
+{
+	if (this != &other)
+		str = other.str;
+	return *this;
+}
+
+std::string bigint::getStr() const { return str; }
 
 bigint bigint::operator+(const bigint &other) const
 {
@@ -115,13 +117,6 @@ bigint bigint::operator<<(unsigned int k) const
 	return bigint(str + std::string(k, '0'));
 }
 
-bigint &bigint::operator<<=(unsigned int k)
-{
-	if (k > 0 && str != "0")
-		str.append(k, '0');
-	return *this;
-}
-
 bigint bigint::operator>>(unsigned int k) const
 {
 	if (k == 0)
@@ -129,6 +124,13 @@ bigint bigint::operator>>(unsigned int k) const
 	if (k >= str.size())
 		return bigint("0");
 	return bigint(str.substr(0, str.size() - k));
+}
+
+bigint &bigint::operator<<=(unsigned int k)
+{
+	if (k > 0 && str != "0")
+		str.append(k, '0');
+	return *this;
 }
 
 bigint &bigint::operator>>=(unsigned int k)

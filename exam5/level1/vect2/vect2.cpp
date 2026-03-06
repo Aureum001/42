@@ -27,6 +27,8 @@ vect2& vect2::operator=(const vect2& source)
 	return(*this);
 }
 
+vect2::~vect2(){}
+
 int vect2::operator[](int index) const
 {
 	if(index == 0)
@@ -48,7 +50,6 @@ vect2 vect2::operator-() const
 	temp[1] = -temp[1];
 	return(temp);
 }
-
 
 vect2 vect2::operator*(int num) const
 {
@@ -154,19 +155,6 @@ bool vect2::operator!=(const vect2& obj) const
 	return(!(obj == *this));
 }
 
-vect2::~vect2()
-{
-
-}
-
-
-std::ostream& operator<<(std::ostream& os,const vect2& obj)
-{
-	std::cout << "{" << obj[0] << ", " << obj[1] << "}";
-	return(os);
-}
-
-
 vect2 operator*(int num, const vect2& obj)
 {
 	vect2 temp(obj);
@@ -174,3 +162,8 @@ vect2 operator*(int num, const vect2& obj)
 	return(temp);
 }
 
+std::ostream& operator<<(std::ostream& os,const vect2& obj)
+{
+	std::cout << "{" << obj[0] << ", " << obj[1] << "}";
+	return(os);
+}
