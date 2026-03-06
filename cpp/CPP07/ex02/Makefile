@@ -1,23 +1,13 @@
-# Source Files
 SRCS = main.cpp
-
-# Source Files Prefix
 SRCS := $(addprefix src/, $(SRCS))
-# Include Folder
 INCLUDES = "./inc"
 
-# Objects Files
 OBJS = $(SRCS:.cpp=.o)
 
-# Name Of The Compiled Program
-NAME = $(shell basename $(CURDIR))
+NAME = ex02
 
-# Compilation Program
 CXX = c++
-# Compilation Flags
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I$(INCLUDES)
-
-# Remove Files Command
 RM = rm -f
 
 all: $(NAME)
