@@ -1,61 +1,85 @@
-// Created by tde-sous on 4/8/24.
 #include "RPN.hpp"
+
+#include <sstream>
 
 RPN::RPN() {}
 
-RPN::RPN(char *input) : input_(input) {
-  float a;
-  float b;
+RPN::RPN(const RPN &other) : _stack(other._stack) {}
 
-  for (size_t i = 0; i < input_.size(); i++) {
-
-    if (isdigit(input_[i]))
-      this->list_.push(std::strtof(&input_[i], NULL));
-    else if (input_.find_first_of("+/*-", i) == i) {
-      if (this->list_.size() < 2)
-        throw notEnoughNumbers();
-      b = list_.top();
-      list_.pop();
-      a = list_.top();
-      list_.pop();
-      if (input_[i] == '+')
-        list_.push(a + b);
-      else if (input_[i] == '-')
-        list_.push(a - b);
-      else if (input_[i] == '/') {
-        if (b == 0)
-          throw noDivisionByZero();
-        list_.push(a / b);
-      } else if (input_[i] == '*')
-        list_.push(a * b);
-    }
-  }
-  if (list_.size() != 1)
-    throw notEnoughOperators();
-  std::cout << "Result is: " << list_.top() << std::endl;
-}
-
-RPN::RPN(const RPN &other) : input_(other.input_), list_(other.list_){ }
-
-RPN &RPN::operator=(const RPN &other) {
-  if (this != &other)
-  {
-    this->input_ = other.input_;
-    this->list_ = other.list_;
-  }
-  return *this;
+RPN &RPN::operator=(const RPN &other)
+{
+	if (this != &other)
+		_stack = other._stack;
+	return *this;
 }
 
 RPN::~RPN() {}
 
-const char *RPN::noDivisionByZero::what() const throw() {
-  return "Can't divide by zero.";
+RPN::RPN(const char *input)
+{
+	std::istringstream ss(input);
+	std::string token;
+
+	while (ss >> token)
+	{
+		if (token.size() == 1 && std::isdigit((unsigned char)token[0]))
+		{
+			_stack.push(static_cast<float>(token[0] - '0'));
+		}
+		else if (token.size() == 1 &&
+						 (token[0] == '+' || token[0] == '-' ||
+							token[0] == '*' || token[0] == '/'))
+		{
+			if (_stack.size() < 2)
+				throw NotEnoughNumbers();
+			const float b = _stack.top();
+			_stack.pop();
+			const float a = _stack.top();
+			_stack.pop();
+			switch (token[0])
+			{
+			case '+':
+				_stack.push(a + b);
+				break;
+			case '-':
+				_stack.push(a - b);
+				break;
+			case '*':
+				_stack.push(a * b);
+				break;
+			case '/':
+				if (b == 0.0f)
+					throw DivisionByZero();
+				_stack.push(a / b);
+				break;
+			}
+		}
+		else
+		{
+			throw InvalidToken();
+		}
+	}
+	if (_stack.size() != 1)
+		throw NotEnoughOperators();
+	std::cout << _stack.top() << std::endl;
 }
 
-const char *RPN::notEnoughNumbers::what() const throw() {
-  return "Not enough number to perform operation";
+const char *RPN::DivisionByZero::what() const throw()
+{
+	return "Error: division by zero.";
 }
 
-const char *RPN::notEnoughOperators::what() const throw() {
-  return "Not enough operators to perform operation.";
+const char *RPN::NotEnoughNumbers::what() const throw()
+{
+	return "Error: not enough numbers for operation.";
+}
+
+const char *RPN::NotEnoughOperators::what() const throw()
+{
+	return "Error: too many numbers, not enough operators.";
+}
+
+const char *RPN::InvalidToken::what() const throw()
+{
+	return "Error: invalid token in expression.";
 }
