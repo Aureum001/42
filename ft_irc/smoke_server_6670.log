@@ -1,0 +1,6 @@
+[ft_irc] Listening on port 6670
+[ft_irc] Client connected: fd=4 ip=127.0.0.1
+[ft_irc] Client disconnected: fd=4 (connection closed)
+[ft_irc] Client connected: fd=4 ip=127.0.0.1
+[ft_irc] Client disconnected: fd=4 (QUIT command)
+[ft_irc] Shutting down.

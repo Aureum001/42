@@ -23,7 +23,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/types.h>
-
 /* STEP 1: Understand what we're building
  * 
  * A PIPE has TWO ends and connects TWO processes!
@@ -234,4 +233,96 @@ int ft_popen(const char *file, char *const argv[], char type)
  * This allows programs to know how they were invoked (useful for programs
  * with different behaviors based on their name).
  */
+
+/*
+ * TESTING MAIN FUNCTION
+ * Compile with: gcc -Wall -Wextra -Werror ft_popen.c -o ft_popen
+ * Run with: ./ft_popen
+ */
+/*
+#include <stdio.h>
+#include <string.h>
+
+int main(void)
+{
+	int fd;
+	char buffer[1024];
+	ssize_t bytes_read;
+
+	printf("=== TEST 1: Type 'r' - Reading from ls command ===\n");
+	// Create array of arguments - MUST end with NULL!
+	char *ls_args[] = {"ls", "-la", NULL};
+	
+	// Open pipe to read output of 'ls -la'
+	fd = ft_popen("ls", ls_args, 'r');
+	if (fd == -1)
+	{
+		printf("Error: ft_popen failed\n");
+		return (1);
+	}
+	
+	// Read the output from the ls command
+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	if (bytes_read > 0)
+	{
+		buffer[bytes_read] = '\0';  // Null-terminate the string
+		printf("Output from 'ls -la':\n%s\n", buffer);
+	}
+	close(fd);
+
+	printf("\n=== TEST 2: Type 'w' - Writing to grep command ===\n");
+	// We'll send text to grep and it will filter lines containing "main"
+	char *grep_args[] = {"grep", "main", NULL};
+	
+	fd = ft_popen("grep", grep_args, 'w');
+	if (fd == -1)
+	{
+		printf("Error: ft_popen failed\n");
+		return (1);
+	}
+	
+	// Write some text to grep's stdin
+	const char *input = "This is the main function\nAnother line\nCheck main again\nNo match here\n";
+	write(fd, input, strlen(input));
+	close(fd);  // Close to signal end of input to grep
+	
+	// Note: grep's output goes to stdout (your terminal), not back to us
+	// To capture grep's output, you'd need to redirect its stdout too!
+	
+	printf("\n=== TEST 3: Type 'r' - Reading from echo command ===\n");
+	char *echo_args[] = {"echo", "Hello from ft_popen!", NULL};
+	
+	fd = ft_popen("echo", echo_args, 'r');
+	if (fd == -1)
+	{
+		printf("Error: ft_popen failed\n");
+		return (1);
+	}
+	
+	bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+	if (bytes_read > 0)
+	{
+		buffer[bytes_read] = '\0';
+		printf("Echo output: %s", buffer);  // echo already includes newline
+	}
+	close(fd);
+	
+	printf("\n=== TEST 4: Type 'w' - Writing to cat (which echoes back) ===\n");
+	char *cat_args[] = {"cat", NULL};
+	
+	fd = ft_popen("cat", cat_args, 'w');
+	if (fd == -1)
+	{
+		printf("Error: ft_popen failed\n");
+		return (1);
+	}
+	
+	const char *cat_input = "This text is sent to cat\nIt will echo to stdout\n";
+	write(fd, cat_input, strlen(cat_input));
+	close(fd);
+	
+	printf("\n=== All tests complete! ===\n");
+	return (0);
+}
+*/
 

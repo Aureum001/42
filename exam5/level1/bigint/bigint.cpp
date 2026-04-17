@@ -1,20 +1,20 @@
 #include "bigint.hpp"
 
 // small helpers implemented here to avoid heavier STL includes
-static void reverse_inplace(std::string &s)
-{
-	if (s.empty())
-		return;
-	size_t i = 0, j = s.size() - 1;
-	while (i < j)
-	{
-		char t = s[i];
-		s[i] = s[j];
-		s[j] = t;
-		++i;
-		--j;
-	}
-}
+// static void reverse_inplace(std::string &s)
+// {
+// 	if (s.empty())
+// 		return;
+// 	size_t i = 0, j = s.size() - 1;
+// 	while (i < j)
+// 	{
+// 		char t = s[i];
+// 		s[i] = s[j];
+// 		s[j] = t;
+// 		++i;
+// 		--j;
+// 	}
+// }
 
 void bigint::trim()
 {
@@ -87,7 +87,7 @@ bigint bigint::operator+(const bigint &other) const
 		--i;
 		--j;
 	}
-	reverse_inplace(result);
+	std::reverse(result.begin(), result.end());
 	return bigint(result);
 }
 

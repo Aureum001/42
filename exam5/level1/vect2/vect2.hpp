@@ -15,7 +15,7 @@ class vect2
 		~vect2();
 
 		int operator[](int index) const;
-		int& operator[](int index); // NON-COST
+		int& operator[](int index);
 
 		vect2 operator-() const;
 		vect2 operator*(int num) const;

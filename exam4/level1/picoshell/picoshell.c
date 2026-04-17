@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 
+
 /* STEP 1: Understand the input format
  * 
  * cmds is an array of command arrays (char **cmds[])

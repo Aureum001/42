@@ -46,7 +46,7 @@ char *sort_string(char *s)
 	int	i;
 
 	len = ft_strlen(s);
-	swapped = 0;
+	swapped = 1;
 	while(swapped)
 	{
 		swapped = 0;

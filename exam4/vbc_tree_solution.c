@@ -101,12 +101,20 @@ node *factor(char **s)
 	/* Case 1: It's a digit */
 	if (isdigit(**s))
 	{
+		char digit = **s;
+		(*s)++;
+		if (isdigit(**s))
+		{
+			unexpected(**s);
+			return (NULL);
+		}
 		/* Create a VALUE node with the digit */
 		result = new_node((node){
 			.type = VAL,
-			.val = **s - '0'
+			.val = digit - '0'
 		});
-		(*s)++;  /* Consume the digit */
+		if (!result)
+			return (NULL);
 		return (result);
 	}
 	
@@ -244,14 +252,11 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return (1);
-	
 	node *tree = parse_expr(argv[1]);
 	if (!tree)
 		return (1);
-	
 	printf("%d\n", eval_tree(tree));
 	destroy_tree(tree);
-	
 	return (0);
 }
 

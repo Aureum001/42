@@ -34,7 +34,7 @@
  *    - WIFSIGNALED: true if child killed by signal
  *    - WTERMSIG: get the signal number that killed it
  */
-
+#define _GNU_SOURCE
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>

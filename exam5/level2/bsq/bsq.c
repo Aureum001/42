@@ -27,6 +27,15 @@ void free_map(t_map *map)
 	map->grid = NULL;
 }
 
+void print_map(t_map *map)
+{
+	int i;
+
+	i = 0;
+	while (i < map->rows)
+		fprintf(stdout, "%s\n", map->grid[i++]);
+}
+
 int load_map(FILE *fp, t_map *map)
 {
 	char *line;
@@ -120,15 +129,6 @@ void solve(t_map *map)
 	for (i = best_row; i < best_row + best_size; i++)
 		for (j = best_col; j < best_col + best_size; j++)
 			map->grid[i][j] = map->full;
-}
-
-void print_map(t_map *map)
-{
-	int i;
-
-	i = 0;
-	while (i < map->rows)
-		fprintf(stdout, "%s\n", map->grid[i++]);
 }
 
 int bsq(FILE *fp)

@@ -10,16 +10,9 @@ REF="argo.c"
 USR="../../../../rendu/argo/argo.c"
 
 # Compile both versions
-echo "${YELLOW}Compiling reference...${RESET}"
+echo "${YELLOW}Compiling...${RESET}"
 if ! gcc -Wall -Wextra -Werror -o ref "$REF"; then
     echo "${RED}Reference compilation failed!${RESET}"
-    exit 1
-fi
-
-echo "${YELLOW}Compiling your version...${RESET}"
-if ! gcc -Wall -Wextra -Werror -o usr "$USR"; then
-    echo "${RED}Your compilation failed!${RESET}"
-    rm -f ref
     exit 1
 fi
 

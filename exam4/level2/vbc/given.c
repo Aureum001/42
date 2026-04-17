@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <malloc.h> // change this to <stdlib.h>
+#include <stdlib.h> // change this to <stdlib.h>
 #include <ctype.h>
 
 typedef struct node {
@@ -93,6 +93,14 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
         return (1);
+	int i = 0;
+	int len = strlen(argv[1]);
+	while (i < len - 1)
+	{
+		if (isdigit(argv[1][i]) && isdigit(argv[1][i + 1]))
+			return (1);
+		i++;
+	}
     node *tree = parse_expr(argv[1]);
     if (!tree)
         return (1);

@@ -20,11 +20,12 @@ typedef struct s_game
 	char** board;
 } t_game;
 
-int init_game(t_game* game, char* argv[]);
-void fill_board(t_game* game);
-int play(t_game* game);
 void print_board(t_game* game);
 void free_board(t_game* game);
+int init_game(t_game* game, char* argv[]);
+void fill_board(t_game* game);
+int count_neighbors(t_game* game, int i, int j);
+int play(t_game* game);
 
 
 #endif

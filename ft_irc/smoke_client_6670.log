@@ -1,0 +1,1 @@
+:ft_irc NOTICE AUTH :Welcome. Authenticate with PASS <password>\r\n:ft_irc NOTICE AUTH :Password accepted\r\n:ft_irc 001 * bot :Welcome to ft_irc starter\r\n:ft_irc NOTICE bot :You are registered.\r\nPONG :123\r\n

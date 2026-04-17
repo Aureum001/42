@@ -145,3 +145,14 @@ int ft_scanf(const char *format, ...)
 	va_end(ap);
 	return ret;
 }
+
+int main(void)
+{
+	int x, y;
+	char c;
+	char str[100];
+	printf("Enter: <int> <char> <string> <int>\n");
+	int n = ft_scanf("%d %c %s %d", &x, &c, str, &y);
+	printf("Scanned %d items: x=%d, c='%c', str='%s', y=%d\n", n, x, c, str, y);
+	return 0;
+}

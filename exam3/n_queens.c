@@ -20,16 +20,16 @@ void print_solution(int *positions, int n)
 // Check if placing queen at (row, col) is safe
 int is_safe(int *positions, int col, int row)
 {
-	int prev = 0;
-	while (prev < col)
+	int pcol = 0;
+	while (pcol < col)
 	{
-		int prow = positions[prev];
+		int prow = positions[pcol];
 		int diff = prow - row;
 		if (diff < 0)
 			diff = -diff;
-		if (prow == row || diff == col - prev)
+		if (prow == row || diff == col - pcol)
 			return 0;
-		prev++;
+		pcol++;
 	}
 	return 1;
 }
@@ -74,3 +74,4 @@ int main(int argc, char **argv)
 	free(positions);
 	return 0;
 }
+// ./nqueens 4

@@ -216,7 +216,7 @@ int parse_map(json *dst, FILE *stream)
 }
 
 
-int parser(json *dst, FILE *stream)
+int argo(json *dst, FILE *stream)
 {
 	int c = peek(stream);
 
@@ -243,13 +243,6 @@ int parser(json *dst, FILE *stream)
 		return -1;
 	}
 	return (1);
-}
-
-int argo(json *dst, FILE *stream)
-{
-	if (parser(dst, stream) == -1)
-		return -1;
-	return 1;
 }
 
 int	main(int argc, char **argv)

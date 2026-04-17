@@ -9,7 +9,7 @@ typedef struct s_filter_ctx
 {
 	char *pattern;
 	size_t pattern_len;
-	char buffer[4096 + 256];
+	char buffer[4096];
 	size_t buffer_size;
 	size_t remaining;
 }	t_filter_ctx;

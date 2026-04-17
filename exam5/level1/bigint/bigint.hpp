@@ -1,7 +1,7 @@
 #pragma once
 
+#include <algorithm>
 #include <string>
-#include <iostream>
 #include <sstream>
 
 class bigint

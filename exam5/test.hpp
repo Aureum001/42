@@ -1,40 +1,39 @@
 #pragma once
 
-#include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
 
-class vect2
+class bigint
 {
 	private:
-			int x;
-			int y;
+		std::string str;
+		void trim();
+		void check_digits();
 	public:
-			vect2();
-			vect2(int num1, int num2);
-			vect2(const vect2 &source);
-			vect2 &operator=(const vect2 &source);
-			~vect2();
-
-			int operator[](int index) const;
-			int operator[](int index);
-
-			vect2 operator-() const;
-			vect2 operator*(int num) const;
-			vect2 &operator*=(int num);
-			vect2 &operator+=(const vect2 &obj);
-			vect2 &operator-=(const vect2 &obj);
-			vect2 &operator*=(const vect2 &obj);
-			vect2 operator+(const vect2 &obj) const;
-			vect2 operator-(const vect2 &obj) const;
-			vect2 operator*(const vect2 &obj) const;
-
-			vect2 &operator++();
-			vect2 operator++(int);
-			vect2 &operator--();
-			vect2 operator--(int);
-
-			bool operator==(const vect2 &obj) const;
-			bool operator!=(const vect2 &obj) const;
+		bigint();
+		bigint(unsigned int n);
+		bigint(const bigint &other);
+		bigint(const std::string &s);
+		bigint &operator=(const bigint &other);
+		std::string getStr() const;
+		bigint operator+(const bigint &other) const;
+		bigint &operator+=(const bigint &other);
+		bigint &operator++();
+		bigint operator++(int);
+		bigint operator<<(unsigned int n) const;
+		bigint operator>>(unsigned int n) const;
+		bigint &operator<<=(unsigned int n);
+		bigint &operator>>=(unsigned int n);
+		bigint operator<<(const bigint &other) const;
+		bigint operator>>(const bigint &other) const;
+		bigint &operator<<=(const bigint &other);
+		bigint &operator>>=(const bigint &other);
+		bool operator==(const bigint &other) const;
+		bool operator!=(const bigint &other) const;
+		bool operator<(const bigint &other) const;
+		bool operator>(const bigint &other) const;
+		bool operator<=(const bigint &other) const;
+		bool operator>=(const bigint &other) const;
 };
-
-	vect2 operator*(int num, const vect2 &obj);
-	std::ostream &operator<<(std::ostream &os, const vect2 &obj);
+		std::ostream &operator<<(std::ostream &os, const bigint &other);

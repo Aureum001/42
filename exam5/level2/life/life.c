@@ -1,5 +1,30 @@
 #include "life.h"
 
+void print_board(t_game* game)
+{
+	for(int i = 0; i < game->height; i++)
+	{
+		for(int j = 0; j < game->width; j++)
+		{
+			putchar(game->board[i][j]);
+		}
+		putchar('\n');
+	}
+}
+
+void free_board(t_game* game)
+{
+	if(game->board)
+	{
+		for(int i = 0; i < game->height; i++)
+		{
+			if(game->board[i])
+				free(game->board[i]);
+		}
+		free(game->board);
+	}
+}
+
 int init_game(t_game* game, char* argv[])
 {
 	game->width = atoi(argv[1]);
@@ -101,7 +126,6 @@ int play(t_game* game)
 		if(!(temp[i]))
 			return(-1);
 	}
-
 	for(int i = 0; i < game->height; i++)
 	{
 		for(int j = 0; j < game->width; j++)
@@ -123,35 +147,9 @@ int play(t_game* game)
 			}
 		}
 	}
-
 	free_board(game);
 	game->board = temp;
 	return(0);
-}
-
-void print_board(t_game* game)
-{
-	for(int i = 0; i < game->height; i++)
-	{
-		for(int j = 0; j < game->width; j++)
-		{
-			putchar(game->board[i][j]);
-		}
-		putchar('\n');
-	}
-}
-
-void free_board(t_game* game)
-{
-	if(game->board)
-	{
-		for(int i = 0; i < game->height; i++)
-		{
-			if(game->board[i])
-				free(game->board[i]);
-		}
-		free(game->board);
-	}
 }
 
 int main(int argc, char* argv[])
