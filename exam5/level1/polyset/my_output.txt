@@ -1,0 +1,58 @@
+create node: 1
+create node: 2
+create node: 3
+create node: 4
+create node: 5
+1 2 3 4 5 
+1 2 3 4 5 
+1
+1
+0
+0
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+destroying value: 1
+destroying value: 2
+destroying value: 3
+destroying value: 4
+destroying value: 5
+
+create node: 1
+1 
+1 
+1 
+
+create node: 2
+1 2 3 4 
+1 2 3 4 
+1 2 
+
+create node: 3
+1 2 3 4 
+1 2 3 4 
+1 2 3 
+
+create node: 4
+1 2 3 4 
+1 2 3 4 
+1 2 3 4 
+
+create node: 5
+1 2 3 4 5 
+1 2 3 4 5 
+1 2 3 4 5 
+

@@ -1,8 +1,8 @@
-#include "bsq.h"
+#include "test.h"
 
-int parse_header(char *line, t_map *map)
+int parse_header(FILE *fp, t_map *map)
 {
-	if (sscanf(line, "%d %c %c %c", &map->rows, &map->empty, &map->obstacle, &map->full) != 4)
+	if (fscanf(fp, "%d %c %c %c", &map->rows, &map->empty, &map->obstacle, &map->full) != 4)
 		return (-1);
 	if (map->rows <= 0)
 		return (-1);
@@ -16,22 +16,17 @@ int parse_header(char *line, t_map *map)
 void print_map(t_map *map)
 {
 	int i = 0;
-
 	while (i < map->rows)
 		fprintf(stdout, "%s\n", map->grid[i++]);
 }
 
 void free_map(t_map *map)
 {
-	int i = 0;
-
 	if (map->grid)
 	{
-		while (i < map->rows)
-		{
-			if (map->grid[i])
-				free(map->grid[i]);
-		}
+		int i = 0;
+		while (map->grid[i])
+			free(map->grid[i++]);
 		free(map->grid);
 		map->grid = NULL;
 	}
@@ -44,9 +39,13 @@ int load_map(FILE *fp, t_map *map)
 	ssize_t len;
 	int i;
 
+	map->grid = calloc(map->rows + 1, sizeof(char*));
+	if (!map->grid)
+		return (-1);
 	line = NULL;
 	cap = 0;
 	i = 0;
+	getline(&line, &cap, fp);
 	while (i < map->rows)
 	{
 		len = getline(&line, &cap, fp);
@@ -65,12 +64,14 @@ int load_map(FILE *fp, t_map *map)
 			{
 				free(line);
 				free_map(map);
-				return (-1);
+				return(-1);
 			}
 		}
-		map->grid[i] = strdup(line);
+		map->grid[i] = malloc(len + 1);
 		if (!map->grid[i])
 			break;
+		for (int k = 0; k < len + 1; k++)
+			map->grid[i][k] = line[k];
 		i++;
 	}
 	free(line);
@@ -85,17 +86,13 @@ int load_map(FILE *fp, t_map *map)
 void solve(t_map *map)
 {
 	int dp[map->rows][map->cols];
-	int best_size;
-	int best_row;
-	int best_col;
-	int i;
+	int best_size = 0;
+	int best_row = 0;
+	int best_col = 0;
+	int i = 0;
 	int j;
 	int m;
 
-	best_size = 0;
-	best_row = 0;
-	best_col = 0;
-	i = 0;
 	while (i < map->rows)
 	{
 		j = 0;
@@ -114,7 +111,7 @@ void solve(t_map *map)
 					m = dp[i][j - 1];
 				dp[i][j] = m + 1;
 			}
-			if (dp[i][j] > best_size)
+			if (best_size < dp[i][j])
 			{
 				best_size = dp[i][j];
 				best_row = i - best_size + 1;
@@ -132,23 +129,8 @@ void solve(t_map *map)
 int bsq(FILE *fp)
 {
 	t_map map;
-	char *line;
-	size_t cap;
-
-	memset(&map, 0, sizeof(map));
-	line = NULL;
-	cap = 0;
-	if (getline(&line, &cap, fp) <= 0)
-	{
-		free(line);
+	if (parse_header(fp, &map) == -1)
 		return (-1);
-	}
-	if (parse_header(line, &map) == -1)
-	{
-		free(line);
-		return (-1);
-	}
-	free(line);
 	if (load_map(fp, &map) == -1)
 		return (-1);
 	solve(&map);
@@ -157,35 +139,21 @@ int bsq(FILE *fp)
 	return (0);
 }
 
-static void run_file(char *path, int multi)
+static void run_file(char *path)
 {
 	FILE *fp;
-
 	fp = fopen(path, "r");
 	if (!fp || bsq(fp) == -1)
-		fprintf(stderr, "map error\n");
+		fprintf(stderr, "Error: invalid map");
 	if (fp)
 		fclose(fp);
-	if (multi)
-		putchar('\n');
 }
 
 int main(int argc, char *argv[])
 {
-	int i;
-
-	if (argc == 1)
-	{
-		if (bsq(stdin) == -1)
-			fprintf(stderr, "map error\n");
-	}
 	if (argc == 2)
-		run_file(argv[1], 0);
+		run_file(argv[1]);
 	else
-	{
-		i = 1;
-		while (i < argc)
-			run_file(argv[i++], 1);
-	}
+		fprintf(stdout, "Usage: ./bsq /map.txt");
 	return (0);
 }

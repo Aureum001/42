@@ -1,4 +1,8 @@
+#ifndef nullptr
+#define nullptr NULL
+#endif
 #include "array_bag.hpp"
+#include <cstddef>
 #include <iostream>
 
 array_bag::array_bag() {

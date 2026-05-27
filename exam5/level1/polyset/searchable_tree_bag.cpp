@@ -1,4 +1,8 @@
+#ifndef nullptr
+#define nullptr NULL
+#endif
 #include "searchable_tree_bag.hpp"
+#include <cstddef>
 
 searchable_tree_bag::searchable_tree_bag(){}
 searchable_tree_bag::searchable_tree_bag(const searchable_tree_bag &source) : tree_bag(source){}

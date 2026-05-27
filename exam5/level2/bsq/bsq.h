@@ -25,7 +25,7 @@ typedef struct s_map
 	char **grid;   /* NULL-terminated array of row strings */
 } t_map;
 
-int parse_header(char *line, t_map *map);
+int parse_header(FILE *fp, t_map *map);
 void free_map(t_map *map);
 void print_map(t_map *map);
 int load_map(FILE *fp, t_map *map);

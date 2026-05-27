@@ -6,7 +6,7 @@ int maxfd = 0;
 fd_set read_set;
 fd_set write_set;
 fd_set current;
-char send_buffer[MAX_MSG_SIZE + SEND_BUFFER_EXTRA];
+char send_buffer[MAX_MSG_SIZE + 50];
 char recv_buffer[MAX_MSG_SIZE];
 
 static void putstr(int fd, char *str)
@@ -46,7 +46,7 @@ static int init_server_socket(char *port)
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd == -1)
 		err(NULL);
-	bzero(&servaddr, sizeof(servaddr));
+	memset(&servaddr, 0, sizeof(servaddr));
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl(2130706433);
 	servaddr.sin_port = htons(atoi(port));
@@ -63,11 +63,11 @@ static int init_server_socket(char *port)
 static void accept_client(int sockfd)
 {
 	int			connfd;
-	struct sockaddr_in	cli;
-	socklen_t		len;
+	struct		sockaddr_in	cli;
+	socklen_t 	len;
 
-	bzero(&cli, sizeof(cli));
 	len = sizeof(cli);
+	memset(&cli, 0, len);
 	connfd = accept(sockfd, (struct sockaddr *)&cli, &len);
 	if (connfd < 0)
 		err(NULL);
@@ -141,8 +141,6 @@ int main(int ac, char **av)
 				else
 					handle_client_io(fd);
 			}
-		
 		}
 	}
-	
 }

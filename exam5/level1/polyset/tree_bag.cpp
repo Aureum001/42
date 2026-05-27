@@ -1,4 +1,8 @@
+#ifndef nullptr
+#define nullptr NULL
+#endif
 #include "tree_bag.hpp"
+#include <cstddef>
 #include <iostream>
 
 tree_bag::tree_bag() {
